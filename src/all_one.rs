@@ -37,6 +37,10 @@ pub struct AllOne {
     index: HashMap<u32, NonNull<Node>>,
 }
 
+// Guaranteed Send & Sync for AllOne
+unsafe impl Send for AllOne {}
+unsafe impl Sync for AllOne {}
+
 /// 链表节点，节点的值为该节点记录的 key 对应的值，同时记录所有等于该值的 key 的 set。
 #[derive(Default, Debug)]
 struct Node {
@@ -91,8 +95,8 @@ impl AllOne {
         }).unwrap_or_else(|| "".to_string())
     }
 
-    // `pop_head()` will constructs a node from its raw point, which will be destruct
-    // and free allocated memory correctly.
+    // `pop_head()` will constructs a node from its raw point, which will be destructured
+    // and freed allocated memory correctly.
     fn pop_head(&mut self) -> Option<Box<Node>> {
         self.head.map(|node| unsafe {
             let node = Box::from_raw(node.as_ptr());
@@ -207,7 +211,8 @@ impl AllOne {
 impl Drop for AllOne {
     /// Must pop every node to drop allocated memory of nodes
     fn drop(&mut self) {
-        while let Some(_node) = self.pop_head() {
+        while let Some(node) = self.pop_head() {
+            drop(node);
         }
     }
 }

@@ -18,8 +18,11 @@
 //! - 输入数组的长度是正整数，且不超过 10,000。
 //!
 //! See [leetcode](https://leetcode-cn.com/problems/max-consecutive-ones/)
+
 pub struct Solution;
+
 impl Solution {
+    /// 使用 `Iterator` 会很简单
     pub fn find_max_consecutive_ones(nums: Vec<i32>) -> i32 {
         nums
             .split(|&x| x == 0)

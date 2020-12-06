@@ -49,6 +49,7 @@
 pub struct Solution;
 impl Solution {
 
+    /// 二分法，找到 target 的 lower 和 high 边界
     pub fn search_range(nums: Vec<i32>, target: i32) -> Vec<i32> {
         match (binary_search_low(&nums[..], target), binary_search_high(&nums[..], target)) {
             (Some(lower), Some(upper)) => vec![lower as i32, upper as i32],

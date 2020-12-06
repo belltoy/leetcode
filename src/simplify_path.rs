@@ -67,8 +67,12 @@
 //! ```
 //!
 //! See [leetcode](https://leetcode-cn.com/problems/simplify-path/)
+
 pub struct Solution;
+
 impl Solution {
+
+    /// 使用 `Iterator` 操作会很简
     pub fn simplify_path(path: String) -> String {
         let paths = path
             .split('/')

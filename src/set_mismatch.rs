@@ -17,6 +17,8 @@
 //! > 给定的数组是无序的。
 //!
 //! See [leetcode](https://leetcode-cn.com/problems/set-mismatch/)
+
+/// 异或操作
 pub struct Solution;
 impl Solution {
     pub fn find_error_nums(nums: Vec<i32>) -> Vec<i32> {

@@ -1,0 +1,80 @@
+//! # 876. 链表的中间结点
+//!
+//! 难度 简单
+//!
+//! 给定一个头结点为 head 的非空单链表，返回链表的中间结点。
+//!
+//! 如果有两个中间结点，则返回第二个中间结点。
+//!
+//! ## 示例 1：
+//!
+//! ```plain
+//! 输入：[1,2,3,4,5]
+//! 输出：此列表中的结点 3 (序列化形式：[3,4,5])
+//! 返回的结点值为 3 。 (测评系统对该结点序列化表述是 [3,4,5])。
+//! 注意，我们返回了一个 ListNode 类型的对象 ans，这样：
+//! ans.val = 3, ans.next.val = 4, ans.next.next.val = 5, 以及 ans.next.next.next = NULL.
+//! ```
+//!
+//! ## 示例 2：
+//!
+//! ```plain
+//! 输入：[1,2,3,4,5,6]
+//! 输出：此列表中的结点 4 (序列化形式：[4,5,6])
+//! 由于该列表有两个中间结点，值分别为 3 和 4，我们返回第二个结点。
+//! ```
+//!
+//!
+//! ## 提示：
+//!
+//! 给定链表的结点数介于 1 和 100 之间。
+//!
+//! See [leetcode](https://leetcode-cn.com/problems/middle-of-the-linked-list/)
+
+// Definition for singly-linked list.
+#[derive(PartialEq, Eq, Clone, Debug)]
+pub struct ListNode {
+  pub val: i32,
+  pub next: Option<Box<ListNode>>
+}
+
+impl ListNode {
+  #[inline]
+  fn new(val: i32) -> Self {
+    ListNode {
+      next: None,
+      val
+    }
+  }
+}
+
+/// 快慢指针
+///
+/// 但 Rust 中对于一个值不能有两个 mut 的引用，所以可以裸指针。
+///
+/// 因为在一个函数里操作，可以保证是安全的。
+pub struct Solution;
+
+impl Solution {
+
+    pub fn middle_node(head: Option<Box<ListNode>>) -> Option<Box<ListNode>> {
+        let mut dummy = Box::new(ListNode {
+            val: 0,
+            next: head,
+        });
+
+        // to prevent unecessary clone, use raw pointers here
+        let mut slow: *mut _ = &mut dummy.next;
+        let mut fast: *const _ = &dummy.next;
+        let mut slow_prev: *mut _ = &mut dummy;
+
+        unsafe {
+            while (*fast).is_some() && (*fast).as_ref().unwrap().next.is_some() {
+                fast = &(*fast).as_ref().unwrap().next.as_ref().unwrap().next;
+                slow_prev = &mut *(*slow).as_mut().unwrap();
+                slow = &mut (*slow).as_mut().unwrap().next;
+            }
+            (*slow_prev).next.take()
+        }
+    }
+}

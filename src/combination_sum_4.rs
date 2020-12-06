@@ -33,6 +33,7 @@
 //! See [leetcode](https://leetcode-cn.com/problems/combination-sum-iv/)
 
 pub struct Solution;
+
 impl Solution {
     pub fn combination_sum4(nums: Vec<i32>, target: i32) -> i32 {
         let mut s = Vec::with_capacity(target as usize + 1);

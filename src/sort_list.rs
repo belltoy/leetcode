@@ -35,6 +35,9 @@ type List = Option<Box<ListNode>>;
 impl Solution {
 
     /// Bottom Up Merge Sort
+    ///
+    /// ## FIXME
+    /// CANNOT use a raw pointer after value moved
     pub fn sort_list(head: Option<Box<ListNode>>) -> Option<Box<ListNode>> {
         if head.is_none() || head.as_ref().unwrap().next.is_none() {
             return head;
@@ -106,6 +109,7 @@ impl Solution {
         }
 
         // FIXME CANNOT use a raw pointer after value moved
+        // `new_tail: Box<ListNode>` so its location would not be changed
         let tail_ptr: *mut ListNode = &mut **new_tail;
 
         (dummy_head.next, tail_ptr)

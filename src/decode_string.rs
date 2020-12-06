@@ -46,27 +46,27 @@ impl Solution {
     }
 
     fn decode(mut iter: &mut std::str::Chars) -> String {
-        let mut n = String::new();
+        let mut number = String::new();
         let mut s = String::new();
         while let Some(c) = iter.next() {
             match c {
                 '[' => {
                     let r = Self::decode(&mut iter);
-                    s.push_str(&r.repeat(n.parse::<usize>().unwrap_or(1)));
-                    n = String::new(); // reset `n`, because `n` is right before `[`
+                    s.push_str(&r.repeat(number.parse::<usize>().unwrap_or(1)));
+                    number = String::new(); // reset `number`, because `number` is right before `[`
                 }
                 ']' => {
                     break;
                 }
                 '0'..='9' => {
-                    n.push(c);
+                    number.push(c);
                 }
                 c => {
                     s.push(c);
                 }
             }
         }
-        s.repeat(n.parse::<usize>().unwrap_or(1))
+        s.repeat(number.parse::<usize>().unwrap_or(1))
     }
 }
 

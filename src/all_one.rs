@@ -22,6 +22,10 @@ use std::collections::{
     HashSet,
 };
 
+/// 双向链表 + 两个 HashMap
+///
+/// * `keys: HashMap<String, u32>` 记录该数据结构内所有的 key 对应的值，以便用 O(1) 的时间查找 key
+/// * `index: HashMap<u32, NonNull<Node>>` 记录该数据结构内所有 key 的值（作为 key）在链表结构里对应的节点的指针
 #[derive(Default, Debug)]
 pub struct AllOne {
     head: Option<NonNull<Node>>,
@@ -30,6 +34,7 @@ pub struct AllOne {
     index: HashMap<u32, NonNull<Node>>,
 }
 
+/// 链表节点，节点的值为该节点记录的 key 对应的值，同时记录所有等于该值的 key 的 set。
 #[derive(Default, Debug)]
 struct Node {
     next: Option<NonNull<Node>>,
@@ -55,29 +60,11 @@ impl AllOne {
         Default::default()
     }
 
-    fn debug(&self) {
-        println!("keys: {:?}, index: {:?}", self.keys, self.index);
-        println!("head: {:?}, tail: {:?}", self.head, self.tail);
-        println!("nodes:");
-        unsafe {
-            let mut node = self.head;
-            while let Some(current) = node {
-                let n = &*current.as_ptr();
-                println!("    {:?}, value: {}, keys: {:?}, next: {:?}, prev: {:?}", current, n.value, n.keys, n.next, n.prev);
-
-                node = (*current.as_ptr()).next;
-            }
-        }
-        println!("\n\n");
-    }
-
     /** Inserts a new key <Key> with value 1. Or increments an existing key by 1. */
     pub fn inc(&mut self, key: String) {
         unsafe {
             self.update_node(&key, Offset::Inc);
         }
-        println!("\n\n========================= inc({}) ======================", key);
-        self.debug();
     }
 
     /** Decrements an existing key by 1. If Key's value is 1, remove it from the data structure. */
@@ -85,8 +72,6 @@ impl AllOne {
         unsafe {
             self.update_node(&key, Offset::Dec);
         }
-        println!("\n\n========================= dec({}) ======================", key);
-        self.debug();
     }
 
     /** Returns one of the keys with maximal value. */
@@ -103,6 +88,8 @@ impl AllOne {
         }).unwrap_or_else(|| "".to_string())
     }
 
+    // `pop_head()` will constructs a node from its raw point, which will be destruct
+    // and free allocated memory correctly.
     fn pop_head(&mut self) -> Option<Box<Node>> {
         self.head.map(|node| unsafe {
             let node = Box::from_raw(node.as_ptr());

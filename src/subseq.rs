@@ -38,7 +38,8 @@ impl Solution {
         Self::simple_match(&s, &t)
     }
 
-    fn simple_match(s: &str, t: &str) -> bool {
+    /// 双指针
+    pub fn simple_match(s: &str, t: &str) -> bool {
         let (mut i, mut j) = (0, 0);
         let (s, t) = (s.chars().collect::<Vec<_>>(), t.chars().collect::<Vec<_>>());
         let (s_len, t_len) = (s.len(), t.len());
@@ -54,6 +55,7 @@ impl Solution {
 }
 
 /// 后续挑战
+/// 预处理字符串
 pub struct Matching {
     pos: Vec<[Option<usize>; 26]>,
 }

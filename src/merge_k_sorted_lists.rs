@@ -80,8 +80,10 @@ impl PartialOrd for ListNode {
 }
 
 pub struct Solution;
+
 impl Solution {
 
+    /// 使用 BinaryHeap，但需要转化为小顶堆
     pub fn merge_k_lists(lists: Vec<Option<Box<ListNode>>>) -> Option<Box<ListNode>> {
         if lists.is_empty() {
             return None;

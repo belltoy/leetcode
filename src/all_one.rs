@@ -24,6 +24,9 @@ use std::collections::{
 
 /// 双向链表 + 两个 HashMap
 ///
+/// 本实现使用 `NonNull` 封装裸指针，需要注意在删除节点或者 Drop 整个结构的时候需要用
+/// `Box::from_raw()` 来释放内存。
+///
 /// * `keys: HashMap<String, u32>` 记录该数据结构内所有的 key 对应的值，以便用 O(1) 的时间查找 key
 /// * `index: HashMap<u32, NonNull<Node>>` 记录该数据结构内所有 key 的值（作为 key）在链表结构里对应的节点的指针
 #[derive(Default, Debug)]
@@ -150,9 +153,11 @@ impl AllOne {
                     }
                 };
 
+                // if new node is tail, update `tail` ptr
                 if (*node.as_ptr()).next.is_none() {
                     self.tail = Some(node);
                 }
+                // if new node is head, update `head` ptr
                 if (*node.as_ptr()).prev.is_none() {
                     self.head = Some(node);
                 }
@@ -169,7 +174,8 @@ impl AllOne {
             };
             self.index.insert(new_v, node);
             old_index
-        } else { // new_v == 0
+        } else {
+            // if new_v == 0, no need to add a new node, but remove instead
             old_v.and_then(|old_v| self.index.get_mut(&old_v)).map(|v| *v)
         };
 
@@ -179,6 +185,7 @@ impl AllOne {
                 // Should drop node
                 let mut node = Box::from_raw(old_index.as_ptr());
                 self.index.remove(&node.value);
+
                 let (mut next, mut prev) = (node.next.take(), node.prev.take());
                 if let Some(ref mut next) = next {
                     (*next.as_ptr()).prev = prev;
@@ -198,6 +205,7 @@ impl AllOne {
 }
 
 impl Drop for AllOne {
+    /// Must pop every node to drop allocated memory of nodes
     fn drop(&mut self) {
         while let Some(_node) = self.pop_head() {
         }

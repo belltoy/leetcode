@@ -114,7 +114,7 @@ impl Solution {
 
         let step = k % len;
 
-        if step == 0 {
+        if step == 0 || len == 1 {
             return head;
         }
 

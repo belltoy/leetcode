@@ -1,20 +1,36 @@
-// Definition for singly-linked list.
-// #[derive(PartialEq, Eq, Clone, Debug)]
-// pub struct ListNode {
-//   pub val: i32,
-//   pub next: Option<Box<ListNode>>
-// }
-//
-// impl ListNode {
-//   #[inline]
-//   fn new(val: i32) -> Self {
-//     ListNode {
-//       next: None,
-//       val
-//     }
-//   }
-// }
+//! # 21. 合并两个有序链表
+//! 难度 简单
+//!
+//! 将两个升序链表合并为一个新的 升序 链表并返回。新链表是通过拼接给定的两个链表的所有节点组成的。
+//!
+//! ## 示例：
+//!
+//! ```plain
+//! 输入：1->2->4, 1->3->4
+//! 输出：1->1->2->3->4->4
+//! ```
+//!
+//! See [leetcode](https://leetcode-cn.com/problems/merge-two-sorted-lists/)
 
+
+// Definition for singly-linked list.
+#[derive(PartialEq, Eq, Clone, Debug)]
+pub struct ListNode {
+  pub val: i32,
+  pub next: Option<Box<ListNode>>
+}
+
+impl ListNode {
+  #[inline]
+  fn new(val: i32) -> Self {
+    ListNode {
+      next: None,
+      val
+    }
+  }
+}
+
+pub struct Solution;
 type List = Option<Box<ListNode>>;
 impl Solution {
 
@@ -47,7 +63,7 @@ impl Solution {
                     break;
                 }
 
-                let (first, second, mut rest) = Self::split_two_at(start, size);
+                let (first, second, rest) = Self::split_two_at(start, size);
                 let (merged_part, tail) = Self::merge(first, second);
 
                 // link the merged_part list to the linked list
@@ -97,33 +113,32 @@ impl Solution {
 
     /// split a list into two sub list at the `at` index of the rest list,
     /// returning the (firist, second, rest)
-    fn split_two_at(mut head: List, at: usize) -> (List, List, List) {
+    fn split_two_at(head: List, at: usize) -> (List, List, List) {
         if head.is_none() {
             return (None, None, None);
         }
 
-        head.map(|mut head| {
-            // because we need two mutable pointers, so here we have to use unsafe block,
-            // but they are guaranteed safe here.
-            unsafe {
-                let mut slow: *mut ListNode = &mut *head;
-                let mut fast: *mut ListNode = &mut **(*slow).next.as_mut().unwrap();
-                let mut i = 1;
-                while i < at && ((*fast).next.is_some() || (*slow).next.is_some()) {
-                    if (*slow).next.is_some() {
-                        slow = &mut **(*slow).next.as_mut().unwrap();
-                    }
-                    if (*fast).next.is_some() {
-                        if (*fast).next.as_ref().unwrap().next.is_some() {
-                            fast = &mut **(*fast).next.as_mut().unwrap().next.as_mut().unwrap();
-                        } else {
-                            fast = &mut **(*fast).next.as_mut().unwrap();
-                        }
-                    }
-                    i += 1;
+        let mut head = head.unwrap();
+        // because we need two mutable pointers, so here we have to use unsafe block,
+        // but they are guaranteed safe here.
+        unsafe {
+            let mut slow: *mut ListNode = &mut *head;
+            let mut fast: *mut ListNode = &mut **(*slow).next.as_mut().unwrap();
+            let mut i = 1;
+            while i < at && ((*fast).next.is_some() || (*slow).next.is_some()) {
+                if (*slow).next.is_some() {
+                    slow = &mut **(*slow).next.as_mut().unwrap();
                 }
-                (Some(head), (*slow).next.take(), (*fast).next.take())
+                if (*fast).next.is_some() {
+                    if (*fast).next.as_ref().unwrap().next.is_some() {
+                        fast = &mut **(*fast).next.as_mut().unwrap().next.as_mut().unwrap();
+                    } else {
+                        fast = &mut **(*fast).next.as_mut().unwrap();
+                    }
+                }
+                i += 1;
             }
-        }).unwrap()
+            (Some(head), (*slow).next.take(), (*fast).next.take())
+        }
     }
 }

@@ -9,23 +9,33 @@
 //! 字符串的一个子序列是原始字符串删除一些（也可以不删除）字符而不改变剩余字符相对位置形成的新字符串。（例如，"ace"是"abcde"的一个子序列，而"aec"不是）。
 //!
 //! ## 示例 1:
-//! > s = "abc", t = "ahbgdc"
-//! > 返回 true.
+//! ```plain
+//! s = "abc", t = "ahbgdc"
+//! 返回 true.
+//! ```
 //!
 //! ## 示例 2:
-//! > s = "axc", t = "ahbgdc"
-//! > 返回 false.
+//! ```plain
+//! s = "axc", t = "ahbgdc"
+//! 返回 false.
+//! ```
 //!
 //! ## 后续挑战 :
 //!
-//! 如果有大量输入的 S，称作S1, S2, ... , Sk 其中 k >= 10亿，你需要依次检查它们是否为 T 的子序列。在这种情况下，你会怎样改变代码？
+//! 如果有大量输入的 S，称作 S1, S2, ... , Sk
+//! 其中 k >= 10 亿，你需要依次检查它们是否为 T 的子序列。
 //!
+//! 在这种情况下，你会怎样改变代码？
+//!
+//! See [leetcode](https://leetcode-cn.com/problems/is-subsequence/)
 
-struct Solution;
+pub struct Solution;
+
 impl Solution {
     pub fn is_subsequence(s: String, t: String) -> bool {
-        let matching = Matching::new(t);
-        matching.is_match(s)
+        // let matching = Matching::new(t);
+        // matching.is_match(s)
+        Self::simple_match(&s, &t)
     }
 
     fn simple_match(s: &str, t: &str) -> bool {
@@ -43,12 +53,14 @@ impl Solution {
     }
 }
 
-struct Matching {
+/// 后续挑战
+pub struct Matching {
     pos: Vec<[Option<usize>; 26]>,
 }
 
 impl Matching {
-    fn new(target: String) -> Self {
+
+    pub fn new(target: String) -> Self {
         let len = target.len();
         let t: Vec<_> = target.chars().collect();
         let mut pos: Vec<[Option<usize>; 26]> = Vec::with_capacity(len);
@@ -75,7 +87,7 @@ impl Matching {
         }
     }
 
-    fn is_match(&self, s: String) -> bool {
+    pub fn is_match(&self, s: String) -> bool {
         if s.len() > self.pos.len() {
             return false;
         }

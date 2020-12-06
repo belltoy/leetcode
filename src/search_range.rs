@@ -45,6 +45,7 @@
 //! * nums 是一个非递减数组
 //! * `-109 <= target <= 109`
 //!
+//! See [leetcode](https://leetcode-cn.com/problems/find-first-and-last-position-of-element-in-sorted-array/)
 pub struct Solution;
 impl Solution {
 

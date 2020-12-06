@@ -19,7 +19,7 @@
 //!
 //! 2 <= nums.length <= 10000
 //!
-struct Solution;
+pub struct Solution;
 impl Solution {
 
     pub fn single_numbers(nums: Vec<i32>) -> Vec<i32> {

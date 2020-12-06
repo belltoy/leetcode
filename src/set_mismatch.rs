@@ -16,7 +16,8 @@
 //! > 给定数组的长度范围是 [2, 10000]。
 //! > 给定的数组是无序的。
 //!
-struct Solution;
+//! See [leetcode](https://leetcode-cn.com/problems/set-mismatch/)
+pub struct Solution;
 impl Solution {
     pub fn find_error_nums(nums: Vec<i32>) -> Vec<i32> {
         let len = nums.len();

@@ -15,3 +15,4 @@ pub mod sort_list;
 pub mod gen_parentheses;
 pub mod rotate_list;
 pub mod mid_list;
+pub mod dedup;

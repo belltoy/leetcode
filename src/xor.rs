@@ -19,6 +19,7 @@
 //!
 //! 2 <= nums.length <= 10000
 //!
+//! See [leetcode](https://leetcode-cn.com/problems/shu-zu-zhong-shu-zi-chu-xian-de-ci-shu-lcof/)
 
 pub struct Solution;
 

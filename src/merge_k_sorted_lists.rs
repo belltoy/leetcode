@@ -46,7 +46,7 @@
 //!
 //! See [leetcode](https://leetcode-cn.com/problems/merge-k-sorted-lists/)
 
-
+// use crate::util::ListNode;
 // Definition for singly-linked list.
 #[derive(PartialEq, Eq, Clone, Debug)]
 pub struct ListNode {
@@ -56,7 +56,7 @@ pub struct ListNode {
 
 impl ListNode {
   #[inline]
-  fn new(val: i32) -> Self {
+  pub fn new(val: i32) -> Self {
     ListNode {
       next: None,
       val

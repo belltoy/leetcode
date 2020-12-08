@@ -18,3 +18,6 @@ pub mod gen_parentheses;
 pub mod rotate_list;
 pub mod mid_list;
 pub mod dedup;
+pub mod delete_node;
+pub mod remove_elements;
+pub mod reverse_list;

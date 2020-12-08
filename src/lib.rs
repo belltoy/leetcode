@@ -1,5 +1,7 @@
 #![allow(dead_code)]
 
+mod util;
+
 pub mod xor;
 pub mod set_mismatch;
 pub mod max_consecutive_ones;

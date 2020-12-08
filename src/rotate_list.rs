@@ -79,6 +79,45 @@ impl Solution {
         }
     }
 
+    pub fn rotate_right_unsafe(head: Option<Box<ListNode>>, k: i32) -> Option<Box<ListNode>> {
+        debug_assert!(k >= 0);
+
+        if head.is_none() {
+            return None;
+        }
+
+        if k == 0 {
+            return head;
+        }
+
+        let mut len = 0;
+        let mut tail = &head;
+        while let Some(ref node) = tail {
+            len += 1;
+            if node.next.is_none() {
+                break;
+            }
+            tail = &node.next;
+        }
+
+        let step = k % len;
+        if step == 0 {
+            return head;
+        }
+
+        let mut new_head = &head;
+        for _ in 0..step {
+            new_head = &new_head.as_ref().unwrap().next;
+        }
+
+        unsafe {
+            let tail = tail as *const _ as *mut Option<Box<ListNode>>;
+            let new_head = new_head as *const _ as *mut Option<Box<ListNode>>;
+            (*tail).as_mut().unwrap().next = head;
+            (*new_head).as_mut().unwrap().next.take()
+        }
+    }
+
     /// 单指针（引用），安全版本
     pub fn rotate_right_safe(mut head: Option<Box<ListNode>>, k: i32) -> Option<Box<ListNode>> {
         debug_assert!(k >= 0);

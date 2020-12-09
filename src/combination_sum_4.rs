@@ -59,7 +59,7 @@ mod tests {
 
     #[test]
     fn test() {
-        let input = vec![1,2,3];
-        assert_eq!(7, Solution::combination_sum4(input, 4));
+        let t = |nums, t| Solution::combination_sum4(nums, t);
+        assert_eq!(7, t(vec![1,2,3], 4));
     }
 }

@@ -110,33 +110,36 @@ impl Matching {
 
 #[cfg(test)]
 mod tests {
-    use super::Solution;
+    use super::*;
 
     #[test]
     fn test() {
-        let s = "abc".to_string();
-        let t = "ahbgdc".to_string();
-        assert!(Solution::simple_match(&s, &t));
-        assert!(Solution::is_subsequence(s, t));
+        let t1 = |s: &str, t: &str| Solution::is_subsequence(s.into(), t.into());
+        let t2 = |s: &str, t: &str| Matching::new(t.into()).is_match(s.into());
 
-        let s = "axc".to_string();
-        let t = "ahbgdc".to_string();
-        assert!(!Solution::simple_match(&s, &t));
-        assert!(!Solution::is_subsequence(s, t));
+        let s = "abc";
+        let t = "ahbgdc";
+        assert!(t1(s, t));
+        assert!(t2(s, t));
 
-        let s = "axc".to_string();
-        let t = "".to_string();
-        assert!(!Solution::simple_match(&s, &t));
-        assert!(!Solution::is_subsequence(s, t));
+        let s = "axc";
+        let t = "ahbgdc";
+        assert!(!t1(s, t));
+        assert!(!t2(s, t));
 
-        let s = "aaaaaa".to_string();
-        let t = "bbaaaa".to_string();
-        assert!(!Solution::simple_match(&s, &t));
-        assert!(!Solution::is_subsequence(s, t));
+        let s = "axc";
+        let t = "";
+        assert!(!t1(s, t));
+        assert!(!t2(s, t));
 
-        let s = "twn".to_string();
-        let t = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxtxxxxxxxxxxxxxxxxxxxxwxxxxxxxxxxxxxxxxxxxxxxxxxn".to_string();
-        assert!(Solution::simple_match(&s, &t));
-        assert!(Solution::is_subsequence(s, t));
+        let s = "aaaaaa";
+        let t = "bbaaaa";
+        assert!(!t1(s, t));
+        assert!(!t2(s, t));
+
+        let s = "twn";
+        let t = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxtxxxxxxxxxxxxxxxxxxxxwxxxxxxxxxxxxxxxxxxxxxxxxxn";
+        assert!(t1(s, t));
+        assert!(t2(s, t));
     }
 }

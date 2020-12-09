@@ -67,4 +67,19 @@ impl Solution {
 }
 
 
-// TODO test
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::tree;
+
+    #[test]
+    fn test() {
+        let t = |v| Solution::invert_tree(v);
+        assert_eq!(tree![4,7,2,9,6], t(tree![4,2,7,null,null,6,9]));
+        assert_eq!(tree![4,7,2,9,6,3,1], t(tree![4,2,7,1,3,6,9]));
+        assert_eq!(tree![4,7,2], t(tree![4,2,7]));
+        assert_eq!(tree![4,7], t(tree![4,null,7]));
+        assert_eq!(tree![4,null,2], t(tree![4,2]));
+        assert_eq!(tree![], t(tree![]));
+    }
+}

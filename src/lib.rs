@@ -2,7 +2,7 @@
 
 mod util;
 pub use util::linked_list::ListNode;
-pub use util::tree_node::TreeNode;
+pub use {util::tree_node::TreeNode, to_tree as tree};
 
 pub mod xor;
 pub mod set_mismatch;

@@ -28,3 +28,6 @@ pub mod remove_duplicates_from_sorted_list_ii;
 pub mod odd_even_linked_list;
 pub mod reverse_print;
 pub mod sum_lists;
+pub mod first_missing_positive;
+pub mod utf8_validation;
+pub mod integer_replacement;

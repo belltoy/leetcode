@@ -43,7 +43,7 @@ impl TreeNode {
 }
 
 #[macro_export]
-macro_rules! to_tree {
+macro_rules! tree {
     () => {
         None
     };
@@ -54,7 +54,7 @@ macro_rules! to_tree {
             TreeNode::from_vec(vec)
         }
     };
-    ($($e:expr,)*) => {(to_tree![$($e),*])};
+    ($($e:expr,)*) => {(tree![$($e),*])};
 }
 
 #[cfg(test)]
@@ -63,7 +63,7 @@ mod tests {
 
     #[test]
     fn test_from_vec() {
-        let tree = to_tree![4,2,7,1,3,6,9];
+        let tree = tree![4,2,7,1,3,6,9];
         println!("{:?}", tree);
     }
 }

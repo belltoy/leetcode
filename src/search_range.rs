@@ -10,10 +10,9 @@
 //!
 //! 你可以设计并实现时间复杂度为 O(log n) 的算法解决此问题吗？
 //!
+//!  ## 示例 1：
 //!
-//! ## 示例 1：
-//!
-//! ```
+//! ```no_run
 //! /// 输入：nums = [5,7,7,8,8,10], target = 8
 //! /// 输出：[3,4]
 //! use leetcode::search_range::Solution;
@@ -22,7 +21,7 @@
 //!
 //! ## 示例 2：
 //!
-//! ```
+//! ```no_run
 //! /// 输入：nums = [5,7,7,8,8,10], target = 6
 //! /// 输出：[-1,-1]
 //! use leetcode::search_range::Solution;
@@ -31,7 +30,7 @@
 //!
 //! ## 示例 3：
 //!
-//! ```
+//! ```no_run
 //! /// 输入：nums = [], target = 0
 //! /// 输出：[-1,-1]
 //! use leetcode::search_range::Solution;

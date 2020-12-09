@@ -1,6 +1,7 @@
 use std::rc::Rc;
 use std::cell::RefCell;
 
+/// LeetCode 题目中用到的树的节点结构
 // Definition for a binary tree node.
 #[derive(Debug, PartialEq, Eq)]
 pub struct TreeNode {
@@ -19,6 +20,7 @@ impl TreeNode {
         }
     }
 
+    /// 从 `Vec<Option<i32>>` 生成树结构。一般建议使用宏 [`tree!`](tree)
     pub fn from_vec(vec: Vec<Option<i32>>) -> Option<Rc<RefCell<TreeNode>>> {
         use std::collections::VecDeque;
         let root = Some(Rc::new(RefCell::new(TreeNode::new(vec[0].unwrap()))));
@@ -42,6 +44,50 @@ impl TreeNode {
     }
 }
 
+/// Generate a tree structure from a vec-like syntax.
+///
+/// For example:
+///
+/// ```no_run
+/// #[macro_use] extern crate leetcode;
+/// use std::rc::Rc;
+/// use std::cell::RefCell;
+/// use leetcode::{tree, TreeNode};
+///
+/// let tree_node: Option<Rc<RefCell<TreeNode>>> = tree![4,2,7,1,3,6,9];
+/// ```
+/// will be expanded to an optional value: `Option<Rc<RefCell<TreeNode>>>` which with the following
+/// tree structure:
+///
+/// ```plain
+///      4
+///    /   \
+///   2     7
+///  / \   / \
+/// 1   3 6   9
+/// ```
+///
+/// And:
+///
+/// ```no_run
+/// #[macro_use] extern crate leetcode;
+/// use std::rc::Rc;
+/// use std::cell::RefCell;
+/// use leetcode::{tree, TreeNode};
+///
+/// let tree_node: Option<Rc<RefCell<TreeNode>>> = tree![4,2,7,null,null,6,9];
+/// ```
+///
+/// will be expanded to an optional value: `Option<Rc<RefCell<TreeNode>>>` which with the following
+/// tree structure:
+///
+/// ```plain
+///        4
+///      /   \
+///     2     7
+///    / \   / \
+///         6   9
+/// ```
 #[macro_export]
 macro_rules! tree {
     () => {

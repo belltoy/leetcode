@@ -34,15 +34,6 @@ use std::cell::RefCell;
 
 use crate::TreeNode;
 
-impl TreeNode {
-    fn swap(&mut self) {
-        match (self.left.as_mut(), self.right.as_mut()) {
-            (None, None) => (),
-            _ => std::mem::swap(&mut self.left, &mut self.right),
-        }
-    }
-}
-
 pub struct Solution;
 
 impl Solution {
@@ -52,17 +43,13 @@ impl Solution {
     }
 
     fn invert_node(n: &mut TreeNode) {
-        match (n.left.as_ref(), n.right.as_ref()) {
-            (None, None) => (),
-            (Some(left), Some(right)) => {
-                Solution::invert_node(&mut left.borrow_mut());
-                Solution::invert_node(&mut right.borrow_mut());
-            }
-            (Some(v), _) | (_, Some(v)) => {
-                Solution::invert_node(&mut v.borrow_mut());
-            }
-        };
-        n.swap();
+        if let Some(node) = n.left.as_ref() {
+            Solution::invert_node(&mut node.borrow_mut());
+        }
+        if let Some(node) = n.right.as_ref() {
+            Solution::invert_node(&mut node.borrow_mut());
+        }
+        std::mem::swap(&mut n.left, &mut n.right)
     }
 }
 

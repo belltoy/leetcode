@@ -97,3 +97,18 @@ impl Solution {
         "/".to_string() + &paths
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test() {
+        let t = |p: &str| Solution::simplify_path(p.into());
+        assert_eq!("/",         t("/../"));
+        assert_eq!("/home/foo", t("/home//foo/"));
+        assert_eq!("/c",        t("/a/./b/../../c/"));
+        assert_eq!("/c",        t("/a/../../b/../c//.//"));
+        assert_eq!("/a/b/c",    t("/a//b////c/d//././/.."));
+    }
+}

@@ -49,14 +49,13 @@ mod tests {
 
     #[test]
     fn test() {
-        let expect: &[i32] = &[1,6][..];
-        let mut result = Solution::single_numbers(vec![4,1,4,6]);
-        result.sort();
-        assert_eq!(expect, result);
+        let t = |v| {
+            let mut r = Solution::single_numbers(v);
+            r.sort();
+            r
+        };
 
-        let expect: &[i32] = &[2,10][..];
-        let mut result = Solution::single_numbers(vec![1,2,10,4,1,4,3,3]);
-        result.sort();
-        assert_eq!(expect, result);
+        assert_eq!(vec![1,6], t(vec![4,1,4,6]));
+        assert_eq!(vec![2,10], t(vec![1,2,10,4,1,4,3,3]));
     }
 }

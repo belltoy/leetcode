@@ -134,3 +134,15 @@ fn binary_search_high(nums: &[i32], target: i32) -> Option<usize> {
         }
     })
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test() {
+        let t = |n, t| Solution::search_range(n, t);
+        assert_eq!(vec![3i32, 4], t(vec![5,7,7,8,8,10], 8));
+        assert_eq!(vec![-1i32, -1], t(vec![5,7,7,8,8,10], 6));
+    }
+}

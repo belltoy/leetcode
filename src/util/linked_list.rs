@@ -42,3 +42,16 @@ pub fn vec_to_list(vec: Vec<i32>) -> Option<Box<ListNode>> {
         }).into()
     })
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test() {
+        let f = |v| ListNode::from_vec(v);
+        let into = |v| ListNode::into_vec(v);
+        assert_eq!(vec![0i32;0], into(f(vec![])));
+        assert_eq!(vec![1,2,3], into(f(vec![1,2,3])));
+    }
+}

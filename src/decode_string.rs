@@ -96,10 +96,12 @@ mod tests {
 
     #[test]
     fn test() {
-        assert_eq!("aaabcbc", Solution::decode_string("3[a]2[bc]".into()));
-        assert_eq!("accaccacc", Solution::decode_string("3[a2[c]]".into()));
-        assert_eq!("abcabccdcdcdef", Solution::decode_string("2[abc]3[cd]ef".into()));
-        assert_eq!("abccdcdcdxyz", Solution::decode_string("abc3[cd]xyz".into()));
-        assert_eq!("zzzyypqjkjkefjkjkefjkjkefjkjkefyypqjkjkefjkjkefjkjkefjkjkefef", Solution::decode_string("3[z]2[2[y]pq4[2[jk]e1[f]]]ef".into()));
+        let t = |s: &str| Solution::decode_string(s.into());
+        assert_eq!("", t(""));
+        assert_eq!("aaabcbc", t("3[a]2[bc]"));
+        assert_eq!("accaccacc", t("3[a2[c]]"));
+        assert_eq!("abcabccdcdcdef", t("2[abc]3[cd]ef"));
+        assert_eq!("abccdcdcdxyz", t("abc3[cd]xyz"));
+        assert_eq!("zzzyypqjkjkefjkjkefjkjkefjkjkefyypqjkjkefjkjkefjkjkefjkjkefef", t("3[z]2[2[y]pq4[2[jk]e1[f]]]ef"));
     }
 }

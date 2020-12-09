@@ -2,6 +2,7 @@
 
 mod util;
 pub use util::linked_list::ListNode;
+pub use util::tree_node::TreeNode;
 
 pub mod xor;
 pub mod set_mismatch;
@@ -31,3 +32,4 @@ pub mod sum_lists;
 pub mod first_missing_positive;
 pub mod utf8_validation;
 pub mod integer_replacement;
+pub mod invert_tree;

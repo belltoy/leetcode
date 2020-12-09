@@ -28,7 +28,7 @@
 //!
 //! See [leetcode](https://leetcode-cn.com/problems/sum-lists-lcci/)
 //!
-use crate::util::ListNode;
+use crate::ListNode;
 
 pub struct Solution;
 

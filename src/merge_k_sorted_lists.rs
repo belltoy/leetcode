@@ -46,7 +46,7 @@
 //!
 //! See [leetcode](https://leetcode-cn.com/problems/merge-k-sorted-lists/)
 
-// use crate::util::ListNode;
+// use crate::ListNode;
 // Definition for singly-linked list.
 #[derive(PartialEq, Eq, Clone, Debug)]
 pub struct ListNode {

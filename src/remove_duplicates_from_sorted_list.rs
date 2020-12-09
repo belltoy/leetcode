@@ -20,7 +20,7 @@
 //!
 //! See [leetcode](https://leetcode-cn.com/problems/remove-duplicates-from-sorted-list/)
 
-use crate::util::ListNode;
+use crate::ListNode;
 
 pub struct Solution;
 

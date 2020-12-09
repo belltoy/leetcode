@@ -1,4 +1,4 @@
-use crate::util::ListNode;
+use crate::ListNode;
 
 type List = Option<Box<ListNode>>;
 

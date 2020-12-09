@@ -31,7 +31,7 @@
 //!
 //! See [leetcode](https://leetcode-cn.com/problems/middle-of-the-linked-list/)
 
-use crate::util::ListNode;
+use crate::ListNode;
 
 /// 快慢指针
 ///

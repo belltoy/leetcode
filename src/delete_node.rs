@@ -31,7 +31,7 @@
 //!
 //! See [leetcode](https://leetcode-cn.com/problems/shan-chu-lian-biao-de-jie-dian-lcof/)
 
-use crate::util::ListNode;
+use crate::ListNode;
 pub struct Solution;
 impl Solution {
     pub fn delete_node(head: Option<Box<ListNode>>, val: i32) -> Option<Box<ListNode>> {

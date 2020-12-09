@@ -13,7 +13,7 @@
 //!
 //! See [leetcode](https://leetcode-cn.com/problems/remove-linked-list-elements/)
 
-use crate::util::ListNode;
+use crate::ListNode;
 
 pub struct Solution;
 

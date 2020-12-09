@@ -27,7 +27,7 @@
 //!
 //! See [leetcode](https://leetcode-cn.com/problems/odd-even-linked-list/)
 
-use crate::util::ListNode;
+use crate::ListNode;
 
 pub struct Solution;
 

@@ -1,6 +1,7 @@
 #![allow(dead_code)]
 
 mod util;
+pub use util::linked_list::ListNode;
 
 pub mod xor;
 pub mod set_mismatch;

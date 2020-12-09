@@ -17,7 +17,7 @@
 //!
 //! See [leetcode](https://leetcode-cn.com/problems/cong-wei-dao-tou-da-yin-lian-biao-lcof/)
 
-use crate::util::ListNode;
+use crate::ListNode;
 
 pub struct Solution;
 

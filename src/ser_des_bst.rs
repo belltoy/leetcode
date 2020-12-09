@@ -35,29 +35,12 @@
 //!
 //! See [leetcode](https://leetcode-cn.com/problems/serialize-and-deserialize-bst/)
 
-
-// Definition for a binary tree node.
-#[derive(Debug, PartialEq, Eq)]
-pub struct TreeNode {
-  pub val: i32,
-  pub left: Option<Rc<RefCell<TreeNode>>>,
-  pub right: Option<Rc<RefCell<TreeNode>>>,
-}
-
-impl TreeNode {
-  #[inline]
-  pub fn new(val: i32) -> Self {
-    TreeNode {
-      val,
-      left: None,
-      right: None
-    }
-  }
-}
+use crate::TreeNode;
 
 use std::rc::Rc;
 use std::cell::RefCell;
-struct Codec {}
+
+pub struct Codec {}
 
 /**
  * `&self` means the method takes an immutable reference.
@@ -124,23 +107,17 @@ impl Codec {
  */
 
 #[cfg(test)]
-#[allow(unused_imports)]
 mod tests {
-    use super::{Codec, TreeNode};
-    use std::rc::Rc;
-    use std::cell::RefCell;
+    use crate::tree;
+    use super::*;
 
     #[test]
     fn test() {
-        // let codec = Codec::new();
-    }
-
-    /// [2, 1, 3]
-    /// to
-    ///     2
-    ///   /   \
-    ///  1     3
-    fn data_to_node_preorder(_data: &[i32]) -> Option<Rc<RefCell<TreeNode>>> {
-        todo!()
+        let codec = Codec::new();
+        let t = |n| codec.deserialize(codec.serialize(n));
+        assert_eq!(tree![2,1,3], t(tree![2,1,3]));
+        assert_eq!(tree![], t(tree![]));
+        assert_eq!(tree![4,2,7,1,3,6,9], t(tree![4,2,7,1,3,6,9]));
+        assert_eq!(tree![4,2,7,null,null,6,9], t(tree![4,2,7,null,null,6,9]));
     }
 }

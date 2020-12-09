@@ -33,3 +33,4 @@ pub mod first_missing_positive;
 pub mod utf8_validation;
 pub mod integer_replacement;
 pub mod invert_tree;
+pub mod nth_digit;

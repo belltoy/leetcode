@@ -1,7 +1,43 @@
-struct Solution;
+//! # 400. 第N个数字
+//!
+//! 难度 中等
+//!
+//! 在无限的整数序列 `1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, ...` 中找到第 `n` 个数字。
+//!
+//! ## 注意:
+//!
+//! `n` 是正数且在 32 位整数范围内 ( `n < 231` )。
+//!
+//! ## 示例 1:
+//!
+//! ```plain
+//! 输入:
+//! 3
+//!
+//! 输出:
+//! 3
+//! ```
+//!
+//! ## 示例 2:
+//!
+//! ```plain
+//! 输入:
+//! 11
+//!
+//! 输出:
+//! 0
+//!
+//! 说明:
+//!
+//! 第11个数字在序列 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, ... 里是0，它是10的一部分。
+//! ```
+//!
+//! See [leetcode](https://leetcode-cn.com/problems/nth-digit/)
+
+pub struct Solution;
+
 impl Solution {
     pub fn find_nth_digit(n: i32) -> i32 {
-        println!("n: {}", n);
         let mut rest = n as i64;
         let mut range: i64 = 9;
         let mut digits: i32 = 1;
@@ -23,7 +59,6 @@ impl Solution {
             0
         };
 
-        println!("rest: {}, range: {}, digits: {}, base: {}", rest, range, digits, base);
         if digits == 1 {
             return rest;
         }
@@ -35,26 +70,24 @@ impl Solution {
             return target % 10;
         }
 
-        println!("target: {}, rem: {}", target, rem);
-
-
         let mut x = target;
         let mut y = 0;
         for _ in 0..(digits + 1 - rem) {
             y = x % 10;
             x = x / 10;
-            println!("y: {}, x: {}", y, x);
         }
         y
     }
 }
-fn main() {
-    let y = Solution::find_nth_digit(365);
-    println!("y: {}", y);
-    let y = Solution::find_nth_digit(13);
-    println!("y: {}", y);
-    let y = Solution::find_nth_digit(3);
-    println!("y: {}", y);
-    let y = Solution::find_nth_digit(1000000000);
-    println!("y: {}", y);
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test() {
+        let t = |n| Solution::find_nth_digit(n);
+        assert_eq!(3, t(3));
+        assert_eq!(0, t(11));
+    }
 }

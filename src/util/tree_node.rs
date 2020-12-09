@@ -59,7 +59,7 @@ impl TreeNode {
 /// will be expanded to an optional value: `Option<Rc<RefCell<TreeNode>>>` which with the following
 /// tree structure:
 ///
-/// ```plain
+/// ```text
 ///      4
 ///    /   \
 ///   2     7
@@ -81,7 +81,7 @@ impl TreeNode {
 /// will be expanded to an optional value: `Option<Rc<RefCell<TreeNode>>>` which with the following
 /// tree structure:
 ///
-/// ```plain
+/// ```text
 ///        4
 ///      /   \
 ///     2     7

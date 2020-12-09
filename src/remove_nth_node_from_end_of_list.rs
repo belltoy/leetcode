@@ -6,9 +6,9 @@
 //!
 //! ## 示例：
 //!
-//! 给定一个链表: 1->2->3->4->5, 和 n = 2.
+//! 给定一个链表: `1->2->3->4->5`, 和 `n = 2`.
 //!
-//! 当删除了倒数第二个节点后，链表变为 1->2->3->5.
+//! 当删除了倒数第二个节点后，链表变为 `1->2->3->5`.
 //!
 //! ## 说明：
 //!
@@ -25,6 +25,8 @@ pub struct Solution;
 use crate::ListNode;
 
 impl Solution {
+
+    /// 双指针/快慢指针
     pub fn remove_nth_from_end(head: Option<Box<ListNode>>, n: i32) -> Option<Box<ListNode>> {
         if n <= 0 {
             return head;
@@ -48,8 +50,7 @@ impl Solution {
         let p = slow as *const _ as *mut Option<Box<ListNode>>;
         unsafe {
             if let Some(node) = &mut *p {
-                let t = node.next.take();
-                node.next = t.unwrap().next;
+                node.next = node.next.take().unwrap().next;  // slow won't be the last node as n > 0
             }
         }
         dummy.unwrap().next

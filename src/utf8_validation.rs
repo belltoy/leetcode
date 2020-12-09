@@ -9,7 +9,7 @@
 //!
 //! 这是 UTF-8 编码的工作方式：
 //!
-//! ```plain
+//! ```text
 //!    Char. number range  |        UTF-8 octet sequence
 //!       (hexadecimal)    |              (binary)
 //!    --------------------+---------------------------------------------
@@ -27,7 +27,7 @@
 //!
 //! ## 示例 1:
 //!
-//! ```plain
+//! ```text
 //! data = [197, 130, 1], 表示 8 位的序列: 11000101 10000010 00000001.
 //!
 //! 返回 true 。
@@ -36,7 +36,7 @@
 //!
 //! ## 示例 2:
 //!
-//! ```plain
+//! ```text
 //! data = [235, 140, 4], 表示 8 位的序列: 11101011 10001100 00000100.
 //!
 //! 返回 false 。
@@ -112,7 +112,7 @@ impl Solution {
         true
     }
 
-    ///另一种写法，用到了循环，不够直观。
+    /// 另一种写法，用到了循环，不够直观。
     pub fn valid_utf8_old(data: Vec<i32>) -> bool {
         let mut iter = data.iter().map(|i| i.to_le_bytes()[0]);
         while let Some(c) = iter.next() {

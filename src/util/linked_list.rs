@@ -8,10 +8,36 @@ pub struct ListNode {
 
 impl ListNode {
   #[inline]
-  pub fn new(val: i32) -> Self {
-    ListNode {
-      next: None,
-      val
+    pub fn new(val: i32) -> Self {
+        ListNode {
+            next: None,
+            val
+        }
     }
-  }
+
+    pub fn from_vec(vec: Vec<i32>) -> Option<Box<ListNode>> {
+        vec_to_list(vec)
+    }
+
+    pub fn into_vec(list: Option<Box<ListNode>>) -> Vec<i32> {
+        let mut rest = list;
+        std::iter::from_fn(move || {
+            if let Some(node) = rest.as_mut() {
+                let val = Some(node.val);
+                rest = node.next.take();
+                val
+            } else {
+                None
+            }
+        }).collect()
+    }
+}
+
+pub fn vec_to_list(vec: Vec<i32>) -> Option<Box<ListNode>> {
+    vec.into_iter().rev().fold(None, |next, val| {
+        Box::new(ListNode {
+            val,
+            next,
+        }).into()
+    })
 }

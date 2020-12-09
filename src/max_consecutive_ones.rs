@@ -41,8 +41,9 @@ mod tests {
 
     #[test]
     fn test() {
-        assert_eq!(3, Solution::find_max_consecutive_ones(vec![1, 1, 0, 1, 1, 1]));
-        assert_eq!(0, Solution::find_max_consecutive_ones(vec![0, 0, 0, 0]));
-        assert_eq!(0, Solution::find_max_consecutive_ones(vec![]));
+        let t = |n| Solution::find_max_consecutive_ones(n);
+        assert_eq!(3, t(vec![1, 1, 0, 1, 1, 1]));
+        assert_eq!(0, t(vec![0, 0, 0, 0]));
+        assert_eq!(0, t(vec![]));
     }
 }

@@ -63,3 +63,16 @@ impl Solution {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test() {
+        let t = |v| ListNode::into_vec(Solution::middle_node(ListNode::from_vec(v)));
+        assert_eq!(vec![3,4,5], t(vec![1,2,3,4,5]));
+        assert_eq!(vec![4,5,6], t(vec![1,2,3,4,5,6]));
+        assert_eq!(vec![0i32;0], t(vec![]));
+    }
+}

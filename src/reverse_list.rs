@@ -35,3 +35,14 @@ impl Solution {
         prev
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test() {
+        let t = |v| ListNode::into_vec(Solution::reverse_list(ListNode::from_vec(v)));
+        assert_eq!(vec![5,4,3,2,1], t(vec![1,2,3,4,5]));
+    }
+}

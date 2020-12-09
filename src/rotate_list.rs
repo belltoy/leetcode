@@ -159,3 +159,17 @@ impl Solution {
         new_head
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test() {
+        let t = |v, k| ListNode::into_vec(Solution::rotate_right(ListNode::from_vec(v), k));
+        assert_eq!(vec![4,5,1,2,3], t(vec![1,2,3,4,5], 2));
+        assert_eq!(vec![1,2,3,4,5], t(vec![1,2,3,4,5], 0));
+        assert_eq!(vec![0i32;0], t(vec![], 2));
+        assert_eq!(vec![0i32;0], t(vec![], 0));
+    }
+}

@@ -1,4 +1,5 @@
 //! # 203. 移除链表元素
+//!
 //! 难度 简单
 //!
 //! 删除链表中等于给定值 val 的所有节点。
@@ -29,5 +30,17 @@ impl Solution {
             node = &mut node.as_mut().unwrap().next;
         }
         dummy.unwrap().next
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test() {
+        let t = |v, t| ListNode::into_vec(Solution::remove_elements(ListNode::from_vec(v), t));
+        assert_eq!(vec![1,2,3,4,5], t(vec![1,2,6,3,4,5,6], 6));
+        assert_eq!(vec![0i32;0], t(vec![], 6));
     }
 }

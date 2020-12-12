@@ -36,3 +36,4 @@ pub mod invert_tree;
 pub mod nth_digit;
 pub mod compare_version_numbers;
 pub mod power_of_two;
+pub mod parse_lisp;

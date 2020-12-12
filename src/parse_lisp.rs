@@ -65,7 +65,7 @@
 //!
 
 use std::collections::{HashMap, HashSet};
-use std::iter::Peekable;
+use std::iter::{Fuse, Peekable};
 
 /// 用 Rust 写代码，无法对错误视而不见。 只有在最后调用的时候假设输入都是合法的。
 ///
@@ -89,12 +89,12 @@ type Result<T> = std::result::Result<T, String>;
 impl Solution {
 
     pub fn evaluate(expression: String) -> i32 {
-        let tokens = tokenize(&expression);
-        let mut e = Evaluation::new(tokens.peekable());
-        match e.eval(None) {
-            Ok(res) => res,
-            Err(e) => panic!(e),   // assume all inputs will be valid
-        }
+        let mut e = Evaluation::new(tokenize(&expression));
+        // assume all inputs will be valid
+        let res = e.eval(None).unwrap_or_else(|e| panic!(e));
+        // 如果还有符号，说明输入是非法的
+        assert!(e.is_end(), "Unexpected input");
+        res
     }
 }
 
@@ -105,15 +105,15 @@ struct Evaluation<T: Iterator> {
     /// entire namespace in the current level
     vars: HashMap<String, i32>,
 
-    tokens: Peekable<T>,
+    tokens: Peekable<Fuse<T>>,
 }
 
 impl<T: Iterator> Evaluation<T> {
-    fn new(tokens: Peekable<T>) -> Self {
+    fn new(tokens: T) -> Self {
         Self {
             stacks: Vec::new(),
             vars: HashMap::new(),
-            tokens,
+            tokens: tokens.fuse().peekable(),
         }
     }
 }
@@ -131,6 +131,11 @@ impl<T: Iterator<Item = Token>> Evaluation<T> {
                     Err(format!("Invalid, expect token: {:?}, found: {:?}", expect, token))
                 }
             })
+    }
+
+    #[inline]
+    fn is_end(&mut self) -> bool {
+        self.tokens.peek().is_none()
     }
 
     // Evaluate expression
@@ -173,8 +178,10 @@ impl<T: Iterator<Item = Token>> Evaluation<T> {
     /// Evaluate `let` expression, from the first item after `let`
     fn eval_let(&mut self, local: &mut HashSet<String>) -> Result<i32> {
         loop {
+            // 分两种情况，先处理键值对的赋值语句，然后处理 `let` 语句中最后的 expr 部分
             match self.tokens.peek() {
 
+                // 如果下一个表达式是标识符，那么有以下几种符合的情况
                 Some(Token::Ident(_var)) => {
                     let ident = match self.tokens.next().unwrap() {
                         Token::Ident(s) => s,
@@ -182,20 +189,15 @@ impl<T: Iterator<Item = Token>> Evaluation<T> {
                     };
 
                     match self.tokens.peek() {
-                        // assignment a var with a parenthesis expression
-                        Some(Token::LeftParenthesis) => {
-                            let res = self.eval(Some(&local))?;
-
-                            self.vars.insert(ident.clone(), res);
-                            local.insert(ident);
-                        }
-                        // assignment a var with a constant or a variable
-                        Some(Token::Const(_)) | Some(Token::Ident(_)) => {
+                        // assignment a var with a parenthesis expression (...) or a constant or a variable
+                        // 赋值表达式，给之前的 ident 赋值，可以是 括号表达式、常量表达式、变量表达式，求值后更新变量空间，同时记录 local 变量名，循环处理
+                        Some(Token::LeftParenthesis) | Some(Token::Const(_)) | Some(Token::Ident(_)) => {
                             let res = self.eval(Some(&local))?;
                             self.vars.insert(ident.clone(), res);
                             local.insert(ident);
                         }
                         // evaluate the last expression of let
+                        // 如果标识符之后接着是右括号，说明这个标识符是 `let` 语句的最后一部分，也就是说这个标识符是变量表达式，可以直接求值返回
                         Some(Token::RightParenthesis) => {
                             return self.vars.get(&ident).map(|&v| v).ok_or_else(||format!("Not found var: `{}`", ident));
                         }
@@ -205,15 +207,11 @@ impl<T: Iterator<Item = Token>> Evaluation<T> {
                     }
                 }
 
-                // let expr part is const
-                Some(Token::Const(_)) => {
+                // let expr part is const or is (...) expr
+                // 如果最后一个表达式是常量表达式或者是括号表达式，可以直接求值回返，紧接着之后一定是一个右括号，否则就不合法
+                Some(Token::Const(_)) | Some(Token::LeftParenthesis) => {
                     return self.eval(Some(&local));
                     // next should be Token::RightParenthesis
-                }
-
-                // let expr part is (...) expr
-                Some(Token::LeftParenthesis) => {
-                    return self.eval(Some(&local));
                 }
 
                 _ => {

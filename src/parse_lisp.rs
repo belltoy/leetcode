@@ -67,7 +67,23 @@
 use std::collections::{HashMap, HashSet};
 use std::iter::Peekable;
 
+/// 用 Rust 写代码，无法对错误视而不见。 只有在最后调用的时候假设输入都是合法的。
+///
+/// 代码看起来挺长，其实很简单，代码结构也很清晰。
+///
+/// 主要思路是递归，先 tokenize 输入，这里因为用了 [`Iterator`](Iterator) tokenize 返回的时候是没有遍历的。
+///
+/// lisp 语法规则很简单，直接看 `eval()`。
+///
+/// 主要逻辑在 `eval()` 里，很简单，就是处理 `let` 语句稍微需要注意下，进入 `eval_let()` 之前需要入栈，`eval_let()` 返回后需要出栈。
+///
+/// 在 `eval_let()` 里循环处理赋值语句，最后表达式求值返回。
+///
+/// 另外要说的是，Rust 实现的思路一般不像 C 那样直接处理下标，而是利用高级别的抽象（例如 [`Iterator`](Iterator)）这种去处理，只要遍历一次。
+///
+/// 栈的实现，没有在进入下一个作用域的时候拷贝变量空间，而是把当前作用域的变量名对应的键值对入栈，出栈的时候先删除当前作用域里的变量，再从整个栈里恢复变量空间。
 pub struct Solution;
+
 type Result<T> = std::result::Result<T, String>;
 
 impl Solution {
@@ -207,6 +223,7 @@ impl<T: Iterator<Item = Token>> Evaluation<T> {
         }
     }
 
+    /// 从变量空间里找到当前使用域里的变量，入栈
     fn push_stack(&mut self, local: Option<&HashSet<String>>) {
         local.map(|local| {
             let mut stack = HashMap::new();
@@ -219,6 +236,7 @@ impl<T: Iterator<Item = Token>> Evaluation<T> {
         });
     }
 
+    /// 从变量空间里删除当前作用域里的变量，然后从栈里恢复所有变量空间里的值，然后弹出栈顶
     fn pop_stack(&mut self, local: Option<&HashSet<String>>) {
         local.map(|local| {
             for k in local.iter() {

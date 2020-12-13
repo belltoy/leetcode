@@ -120,12 +120,15 @@ impl Solution {
     pub fn is_valid(code: String) -> bool {
         code.chars().try_fold(Validator::new(), |mut validator, c| {
             validator.handle(c).map(|_| validator)
-        }).and_then(|validator| match validator.is_end() {
+        })
+        .and_then(|validator| match validator.is_end() {
             true => Ok(()),
             _ => Err("EOF"),
-        }).map_err(|e| {
-            eprintln!("Invalid, err: {}", e);
-        }).is_ok()
+        })
+        // .map_err(|e| {
+        //     eprintln!("Invalid, err: {}", e);
+        // })
+        .is_ok()
     }
 }
 
@@ -181,15 +184,18 @@ impl Validator {
         }
     }
 
+    // In the Init state, only accept '<' character then go into next state: TagName
     fn handle_init(&mut self, c: char) -> Result {
-        if c == '<' {
-            self.state = State::TagName {
-                cache: String::new(),
-                is_close: false,
-            };
-            Ok(())
-        } else {
-            Err("Expect <")
+        match (&self.state, c) {
+            (State::Init, '<') => {
+                self.state = State::TagName {
+                    cache: String::new(),
+                    is_close: false,
+                };
+                Ok(())
+            }
+            (State::Init, _) => Err("Expect <"),
+            _ => panic!("Invalid State, expect Init"),
         }
     }
 
@@ -197,25 +203,27 @@ impl Validator {
         match self.state {
             State::TagName { ref mut cache, ref mut is_close } => {
                 match (c, cache.len(), &is_close) {
-                    (c @ 'A' ..= 'Z', len, _) => {
-                        if let 0..=8 = len {
-                            cache.push(c);
-                            Ok(())
-                        } else {
-                            Err("Tag name too long")
-                        }
+                    // meet 'A'..='Z', tag name cache should less then 9
+                    (c @ 'A' ..= 'Z', 0..=8, _) => {
+                        cache.push(c);
+                        Ok(())
                     }
+                    // meet '>', cache length should in 1..=9
+                    // if not is_close then into TagContent
                     ('>', 1..=9, false) => {
                         self.stack.push(cache.to_string());
                         self.state = State::TagContent;
                         Ok(())
                     }
+                    // if is_close then into TagContent or End
                     ('>', 1..=9, true) => {
                         match self.stack.pop() {
                             Some(s) if s == *cache => {
                                 if self.stack.len() > 0 {
+                                    // inner level tag closed, into outer TagContent
                                     self.state = State::TagContent;
                                 } else {
+                                    // top level tag closed, into End
                                     self.state = State::End;
                                 }
                                 Ok(())
@@ -225,51 +233,39 @@ impl Validator {
                             }
                         }
                     }
-                    ('>', _, _) => {
-                        Err("Wrong tag name length")
-                    }
+                    // meet '/' only when not is_close and cache is empty
                     ('/', 0, false) => {
                         *is_close = true;
                         Ok(())
                     }
-                    ('/', _, true) |
-                    ('/', _, false) => {
-                        Err("Invalid tag char")
+                    // otherwise invalid tag character
+                    // ('/', _, true) | ('/', _, false) => Err("Invalid tag char"),
+                    // meet '!' only when cache is empty & not !is_close, which means '!' just after '<'
+                    ('!', 0, false) if !self.stack.is_empty() => {
+                        self.state = State::CDataTag { cache: String::new() };
+                        Ok(())
                     }
-                    ('!', 0, _)  => {
-                        if self.stack.is_empty() {
-                            Err("Invalid char !")
-                        } else {
-                            self.state = State::CDataTag {
-                                cache: String::new(),
-                            };
-                            Ok(())
-                        }
-                    }
-                    _ => {
-                        Err("Invalid character in TagName State")
-                    }
+                    // you can match more different conditions for more error detail
+                    _ => Err("Invalid character in TagName State"),
                 }
             }
-            _ => Err("Invalid State, expect TagName")
+            _ => panic!("Invalid State, expect TagName")
         }
     }
 
     fn handle_tag_content(&mut self, c: char) -> Result {
-        match self.state {
-            State::TagContent => {
-                match c {
-                    '<' => {
-                        self.state = State::TagName {
-                            cache: String::new(),
-                            is_close: false,
-                        };
-                        Ok(())
-                    }
-                    _ => Ok(())
-                }
+        match (&self.state, c) {
+            // if meet '<', then into inner TagName
+            (State::TagContent, '<') => {
+                self.state = State::TagName {
+                    cache: String::new(),
+                    is_close: false,
+                };
+                Ok(())
             }
-            _ => Err("Invalid State, expect TagContent")
+            // otherwise all characters would be ok
+            (State::TagContent, _) => Ok(()),
+            _ => panic!("Invalid State, expect TagContent")
         }
     }
 
@@ -293,7 +289,7 @@ impl Validator {
                     }
                 }
             }
-            _ => Err("Invalid State, expect CDataTag")
+            _ => panic!("Invalid State, expect CDataTag")
         }
     }
 
@@ -319,15 +315,18 @@ impl Validator {
                         *prefix = (true, false);
                         Ok(())
                     }
-                    (_, _, _) => Ok(()),
+                    _ => Ok(()),
                 }
             }
-            _ => Err("Invalid State, expect CDataContent")
+            _ => panic!("Invalid State, expect CDataContent")
         }
     }
 
     fn handle_end(&mut self, _c: char) -> Result {
-        Err("End of code")
+        match self.state {
+            State::End => Err("End of code"),
+            _ => panic!("Invalid State, expect End"),
+        }
     }
 }
 
@@ -340,6 +339,7 @@ mod tests {
         let t = |s: &str| Solution::is_valid(s.into());
         assert!(t("<DIV>This is the first line <![CDATA[<div>]]></DIV>"));
         assert!(t("<DIV>>>  ![cdata[]] <![CDATA[<div>]>]]>]]>>]</DIV>"));
+        assert!(!t("<DIV>>>  ![cdata[]] </![CDATA[<div>]>]]>]]>>]</DIV>"));
         assert!(t("<TRUE><![CDATA[wahaha]]]><![CDATA[]> wahaha]]></TRUE>"));
 
         assert!(!t("<A>  <B> </A>   </B>"));

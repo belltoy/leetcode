@@ -334,16 +334,20 @@ mod tests {
 
     #[test]
     fn test() {
-        let t = |s: &str| Solution::evaluate(s.into());
-        assert_eq!(3, t("(add 1 2)"));
-        assert_eq!(15, t("(mult 3 (add 2 3))"));
-        assert_eq!(10, t("(let x 2 (mult x 5))"));
-        assert_eq!(14, t("(let x 2 (mult x (let x 3 y 4 (add x y))))"));
-        assert_eq!(2, t("(let x 3 x 2 x)"));
-        assert_eq!(5, t("(let x 1 y 2 x (add x y) (add x y))"));
-        assert_eq!(6, t("(let x 2 (add (let x 3 (let x 4 x)) x))"));
-        assert_eq!(4, t("(let a1 3 b2 (add a1 1) b2)"));
-        assert_eq!(14, t("(let x 2 (mult (let x 3 y 4 (add x y)) x))"));
-        assert_eq!(-128534112, t("(let x0 -4 x1 2 x2 -4 x3 3 x4 2 x5 3 x6 2 x7 2 x8 -1 x9 -1 (mult (mult (mult x2 -8) (add -5 (let x0 1 x5 -3 (add (add x7 (add (let x0 -5 x9 -4 (add (mult 1 1) -10)) (mult -8 (mult x3 -5)))) (add (let x0 3 x8 -1 (let x0 -1 x9 1 (add x4 -6))) x9))))) (mult (add (mult (add (mult -6 (mult (add x1 x4) -4)) (let x0 -2 x7 4 (mult (mult (let x0 -3 (mult 1 1)) (add (mult 1 1) (mult 1 1))) (mult -5 (mult -9 (mult 1 1)))))) -10) x5) (mult (mult x5 -7) x8))))"));
+        let cases = vec![
+            (3, "(add 1 2)"),
+            (15, "(mult 3 (add 2 3))"),
+            (10, "(let x 2 (mult x 5))"),
+            (14, "(let x 2 (mult x (let x 3 y 4 (add x y))))"),
+            (2, "(let x 3 x 2 x)"),
+            (5, "(let x 1 y 2 x (add x y) (add x y))"),
+            (6, "(let x 2 (add (let x 3 (let x 4 x)) x))"),
+            (4, "(let a1 3 b2 (add a1 1) b2)"),
+            (14, "(let x 2 (mult (let x 3 y 4 (add x y)) x))"),
+            (-128534112, "(let x0 -4 x1 2 x2 -4 x3 3 x4 2 x5 3 x6 2 x7 2 x8 -1 x9 -1 (mult (mult (mult x2 -8) (add -5 (let x0 1 x5 -3 (add (add x7 (add (let x0 -5 x9 -4 (add (mult 1 1) -10)) (mult -8 (mult x3 -5)))) (add (let x0 3 x8 -1 (let x0 -1 x9 1 (add x4 -6))) x9))))) (mult (add (mult (add (mult -6 (mult (add x1 x4) -4)) (let x0 -2 x7 4 (mult (mult (let x0 -3 (mult 1 1)) (add (mult 1 1) (mult 1 1))) (mult -5 (mult -9 (mult 1 1)))))) -10) x5) (mult (mult x5 -7) x8))))"),
+        ];
+        for (expect, arg) in cases {
+            assert_eq!(expect, Solution::evaluate(arg.into()));
+        }
     }
 }

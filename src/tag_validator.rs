@@ -228,9 +228,7 @@ impl Validator {
                                 }
                                 Ok(())
                             }
-                            _ => {
-                                Err("Wrong close tag")
-                            }
+                            _ => Err("Wrong close tag"),
                         }
                     }
                     // meet '/' only when not is_close and cache is empty
@@ -249,7 +247,7 @@ impl Validator {
                     _ => Err("Invalid character in TagName State"),
                 }
             }
-            _ => panic!("Invalid State, expect TagName")
+            _ => panic!("Invalid State, expect TagName"),
         }
     }
 
@@ -265,7 +263,7 @@ impl Validator {
             }
             // otherwise all characters would be ok
             (State::TagContent, _) => Ok(()),
-            _ => panic!("Invalid State, expect TagContent")
+            _ => panic!("Invalid State, expect TagContent"),
         }
     }
 
@@ -284,12 +282,10 @@ impl Validator {
                             Err("Wrong CDataTag character")
                         }
                     }
-                    _ => {
-                        Err("CDataTag invalid")
-                    }
+                    _ => Err("CDataTag invalid"),
                 }
             }
-            _ => panic!("Invalid State, expect CDataTag")
+            _ => panic!("Invalid State, expect CDataTag"),
         }
     }
 
@@ -318,7 +314,7 @@ impl Validator {
                     _ => Ok(()),
                 }
             }
-            _ => panic!("Invalid State, expect CDataContent")
+            _ => panic!("Invalid State, expect CDataContent"),
         }
     }
 
@@ -336,18 +332,22 @@ mod tests {
 
     #[test]
     fn test() {
-        let t = |s: &str| Solution::is_valid(s.into());
-        assert!(t("<DIV>This is the first line <![CDATA[<div>]]></DIV>"));
-        assert!(t("<DIV>>>  ![cdata[]] <![CDATA[<div>]>]]>]]>>]</DIV>"));
-        assert!(!t("<DIV>>>  ![cdata[]] </![CDATA[<div>]>]]>]]>>]</DIV>"));
-        assert!(t("<TRUE><![CDATA[wahaha]]]><![CDATA[]> wahaha]]></TRUE>"));
+        let cases = vec![
+            (true, "<DIV>This is the first line <![CDATA[<div>]]></DIV>"),
+            (true, "<DIV>>>  ![cdata[]] <![CDATA[<div>]>]]>]]>>]</DIV>"),
+            (true, "<TRUE><![CDATA[wahaha]]]><![CDATA[]> wahaha]]></TRUE>"),
 
-        assert!(!t("<A>  <B> </A>   </B>"));
-        assert!(!t("<DIV>  div tag is not closed  <DIV>"));
-        assert!(!t("<DIV>  unmatched <  </DIV>"));
-        assert!(!t("<DIV> closed tags with invalid tag name  <b>123</b> </DIV>"));
-        assert!(!t("<DIV> unmatched tags with invalid tag name  </1234567890> and <CDATA[[]]>  </DIV>"));
-        assert!(!t("<DIV>  unmatched start tag <B>  and unmatched end tag </C>  </DIV>"));
-        assert!(!t("<A><![CDATA[</A>]]123></A>"));
+            (false, "<DIV>>>  ![cdata[]] </![CDATA[<div>]>]]>]]>>]</DIV>"),
+            (false, "<A>  <B> </A>   </B>"),
+            (false, "<DIV>  div tag is not closed  <DIV>"),
+            (false, "<DIV>  unmatched <  </DIV>"),
+            (false, "<DIV> closed tags with invalid tag name  <b>123</b> </DIV>"),
+            (false, "<DIV> unmatched tags with invalid tag name  </1234567890> and <CDATA[[]]>  </DIV>"),
+            (false, "<DIV>  unmatched start tag <B>  and unmatched end tag </C>  </DIV>"),
+            (false, "<A><![CDATA[</A>]]123></A>"),
+        ];
+        for (expect, arg) in cases {
+            assert_eq!(expect, Solution::is_valid(arg.into()));
+        }
     }
 }

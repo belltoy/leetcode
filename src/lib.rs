@@ -4,7 +4,7 @@ mod util;
 pub use util::linked_list::ListNode;
 pub use util::tree_node::TreeNode;
 
-pub mod xor;
+pub mod single_numbers;
 pub mod set_mismatch;
 pub mod max_consecutive_ones;
 pub mod merge_k_sorted_lists;

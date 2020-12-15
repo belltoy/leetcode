@@ -41,3 +41,5 @@ pub mod tag_validator;
 pub mod longest_valid_parentheses;
 pub mod powx_n;
 pub mod merge_sorted_array;
+pub mod subsets;
+pub mod subsets_ii;

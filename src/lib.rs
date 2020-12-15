@@ -43,3 +43,5 @@ pub mod powx_n;
 pub mod merge_sorted_array;
 pub mod subsets;
 pub mod subsets_ii;
+pub mod pascals_triangle;
+pub mod pascals_triangle_ii;

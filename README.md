@@ -1,4 +1,4 @@
-# Leetcode 解题
+# Leetcode Rust Solutions
 
 
 ## Run test cases
@@ -11,3 +11,7 @@ cargo test
 ```shell
 cargo doc --open
 ```
+
+## License
+
+This project is licensed under the [MIT license](LICENSE).

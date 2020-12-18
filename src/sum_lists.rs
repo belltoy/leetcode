@@ -35,52 +35,35 @@ pub struct Solution;
 impl Solution {
     pub fn add_two_numbers(l1: Option<Box<ListNode>>, l2: Option<Box<ListNode>>) -> Option<Box<ListNode>> {
         let mut sum = Some(Box::new(ListNode::new(0)));
-        let mut l1 = &l1;
-        let mut l2 = &l2;
-        let mut rest = &None;
+        let mut sum_tail = sum.as_mut();
+        let mut l1 = l1.as_ref();
+        let mut l2 = l2.as_ref();
         let mut carry = 0;
-        let mut sum_tail = &mut sum;
-        while l1.is_some() || l2.is_some() {
-            if l1.is_none() {
-                rest = l2;
-                break;
-            }
-            if l2.is_none() {
-                rest = l1;
-                break;
-            }
-
-            let x = l1.as_ref().unwrap().val + l2.as_ref().unwrap().val + carry;
-            let (x, c) = if x >= 10 {
-                (x % 10, 1)
-            } else {
-                (x, 0)
+        loop {
+            let s = match (l1, l2, carry) {
+                (None, None, 0) => break,
+                (None, None, 1) => 1,
+                (Some(n1), Some(n2), carry) => n1.val + n2.val + carry,
+                (Some(n), None, carry) | (None, Some(n), carry) => n.val + carry,
+                _ => unreachable!(),
             };
-            carry = c;
-            sum_tail.as_mut().unwrap().next = Some(Box::new(ListNode::new(x)));
-            sum_tail = &mut sum_tail.as_mut().unwrap().next;
 
-            l1 = &l1.as_ref().unwrap().next;
-            l2 = &l2.as_ref().unwrap().next;
-        }
-
-        while rest.is_some() {
-            let x = rest.as_ref().unwrap().val + carry;
-            let (x, c) = if x >= 10 {
-                (x % 10, 1)
+            let s = if s >= 10 {
+                carry = 1;
+                s - 10
             } else {
-                (x, 0)
+                carry = 0;
+                s
             };
-            carry = c;
-            sum_tail.as_mut().unwrap().next = Some(Box::new(ListNode::new(x)));
-            sum_tail = &mut sum_tail.as_mut().unwrap().next;
-            rest = &rest.as_ref().unwrap().next;
-        }
 
-        if carry > 0 {
-            sum_tail.as_mut().unwrap().next = Some(Box::new(ListNode::new(carry)));
-        }
+            sum_tail = sum_tail.and_then(|tail| {
+                tail.next = Some(Box::new(ListNode::new(s)));
+                tail.next.as_mut()
+            });
 
+            l1 = l1.and_then(|n| n.next.as_ref());
+            l2 = l2.and_then(|n| n.next.as_ref());
+        }
         sum.unwrap().next
     }
 }

@@ -91,7 +91,6 @@ impl Solution {
                     }
                 }
             })
-            .as_slice()
             .join("/");
 
         "/".to_string() + &paths

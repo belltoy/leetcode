@@ -71,8 +71,8 @@ impl Solution {
     /// FSM
     pub fn my_atoi(s: String) -> i32 {
         s.chars()
-         .try_fold(State::new(), |state, c| state.handle(c))
-         .map_or_else(|n|n, |state| state.into_ans())
+         .try_fold(State::new(), State::handle)
+         .map_or_else(|n|n, State::into_ans)
     }
 }
 

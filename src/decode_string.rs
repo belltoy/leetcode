@@ -64,7 +64,7 @@ impl Solution {
     // * 遇到 `]` 说明本次递归完成，退出 iter 循环，repeat 之后返回（递归返回条件之一，另一个是读取完 iter）
     // * 遇到数字，加入 `number` 缓存
     // * 遇到其它字符，加入 `s` 缓存
-    fn decode(mut iter: &mut std::str::Chars) -> String {
+    fn decode<T: Iterator<Item = char>>(iter: &mut T) -> String {
         let mut number = String::new(); // 数字缓存
         let mut s = String::new(); // 字符缓存
         while let Some(c) = iter.next() {
@@ -72,7 +72,7 @@ impl Solution {
                 // 遇到 `[` 说明前面的数字读完了，递归解码 `]` 之前的字符，然后用数字重复
                 // 同时，清空 `number`
                 '[' => {
-                    let r = Self::decode(&mut iter);
+                    let r = Self::decode(iter);
                     // Call `number.drain(..)` will reset the `number` empty, because the `number` is right before `[`
                     s.push_str(&r.repeat(number.drain(..).collect::<String>().parse::<usize>().unwrap_or(1)));
                 }

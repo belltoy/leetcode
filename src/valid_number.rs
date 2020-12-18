@@ -44,8 +44,9 @@ pub struct Solution;
 impl Solution {
     pub fn is_number(s: String) -> bool {
         s.chars()
-         .try_fold(State::new(), |s, c| s.handle(c))
-         .map_or(false, |s| s.is_valid())
+         .try_fold(State::new(), State::handle)
+         .as_ref()
+         .map_or(false, State::is_valid)
     }
 }
 

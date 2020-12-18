@@ -1,5 +1,6 @@
 # Leetcode Rust Solutions
 
+See [doc](https://belltoy.github.io/leetcode-rs) for better reading experience.
 
 ## Run test cases
 ```shell

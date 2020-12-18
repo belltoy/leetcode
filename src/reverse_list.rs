@@ -24,15 +24,38 @@ pub struct Solution;
 
 impl Solution {
     pub fn reverse_list(head: Option<Box<ListNode>>) -> Option<Box<ListNode>> {
-        let mut curr = head;
-        let mut prev = None;
-        while let Some(ref mut node) = curr {
-            let t = node.next.take();
-            node.next = prev;
-            prev = curr;
-            curr = t;
+        Self::iterate(head)
+    }
+
+    #[inline]
+    fn iterate(head: Option<Box<ListNode>>) -> Option<Box<ListNode>> {
+        head.map(|mut new| {
+            let mut curr = new.next.take();
+            while let Some(mut node) = curr {
+                curr = node.next.replace(new);
+                new = node;
+            }
+            new
+        })
+    }
+
+    #[inline]
+    fn recursion(head: Option<Box<ListNode>>) -> Option<Box<ListNode>> {
+        head.map(|mut head| {
+            if head.next.is_none() {
+                head
+            } else {
+                Self::recur(head.next.take(), head)
+            }
+        })
+    }
+
+    fn recur(curr: Option<Box<ListNode>>, pre: Box<ListNode>) -> Box<ListNode> {
+        if let Some(mut curr) = curr {
+            Self::recur(curr.next.replace(pre), curr)
+        } else {
+            pre
         }
-        prev
     }
 }
 
@@ -42,7 +65,17 @@ mod tests {
 
     #[test]
     fn test() {
-        let t = |v| ListNode::into_vec(Solution::reverse_list(ListNode::from_vec(v)));
-        assert_eq!(vec![5,4,3,2,1], t(vec![1,2,3,4,5]));
+        let cases = vec![
+            (vec![], vec![]),
+            (vec![1,2], vec![2,1]),
+            (vec![5,4,3,2,1], vec![1,2,3,4,5]),
+        ];
+        let t1 = |v| ListNode::into_vec(Solution::iterate(ListNode::from_vec(v)));
+        let t2 = |v| ListNode::into_vec(Solution::recursion(ListNode::from_vec(v)));
+
+        for (expect, head) in cases {
+            assert_eq!(expect, t1(head.clone()));
+            assert_eq!(expect, t2(head));
+        }
     }
 }

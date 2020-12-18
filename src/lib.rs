@@ -46,3 +46,4 @@ pub mod subsets_ii;
 pub mod pascals_triangle;
 pub mod pascals_triangle_ii;
 pub mod string_to_integer_atoi;
+pub mod valid_number;

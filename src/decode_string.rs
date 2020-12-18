@@ -73,8 +73,8 @@ impl Solution {
                 // 同时，清空 `number`
                 '[' => {
                     let r = Self::decode(&mut iter);
-                    s.push_str(&r.repeat(number.parse::<usize>().unwrap_or(1)));
-                    number = String::new(); // reset `number`, because `number` is right before `[`
+                    // Call `number.drain(..)` will reset the `number` empty, because the `number` is right before `[`
+                    s.push_str(&r.repeat(number.drain(..).collect::<String>().parse::<usize>().unwrap_or(1)));
                 }
                 // 遇到 `]` 说明读完了 `[]` 里的字符，在一次递归里这里已经完成，退出 iter
                 // 循环，repeat 之后返回

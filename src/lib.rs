@@ -49,3 +49,4 @@ pub mod string_to_integer_atoi;
 pub mod valid_number;
 pub mod fibonacci_number;
 pub mod fibonacci_number_offer;
+pub mod minimum_path_sum;

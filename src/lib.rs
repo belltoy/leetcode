@@ -50,3 +50,4 @@ pub mod valid_number;
 pub mod fibonacci_number;
 pub mod fibonacci_number_offer;
 pub mod minimum_path_sum;
+pub mod longest_absolute_file_path;

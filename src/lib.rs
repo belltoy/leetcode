@@ -4,6 +4,7 @@ mod util;
 pub use util::linked_list::ListNode;
 pub use util::tree_node::TreeNode;
 
+pub mod two_sum;
 pub mod add_two_numbers;
 pub mod single_numbers;
 pub mod set_mismatch;

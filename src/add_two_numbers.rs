@@ -19,12 +19,13 @@
 //! See [leetcode](https://leetcode-cn.com/problems/add-two-numbers/)
 use crate::ListNode;
 
+/// 这一题与 [sum_lists](super::sum_lists) 基本上一样，除了进阶。
 pub struct Solution;
 
 impl Solution {
     pub fn add_two_numbers(l1: Option<Box<ListNode>>, l2: Option<Box<ListNode>>) -> Option<Box<ListNode>> {
         let mut result = None;
-        let mut high = &mut result;
+        let mut tail = &mut result;
         let mut t = (l1, l2, 0, 0); // (list1, list2, sum, carry)
         loop {
             t = match t {
@@ -44,8 +45,8 @@ impl Solution {
                 }
             };
 
-            *high = Some(Box::new(ListNode::new(t.2)));
-            high = &mut high.as_mut().unwrap().next;
+            *tail = Some(Box::new(ListNode::new(t.2)));
+            tail = &mut tail.as_mut().unwrap().next;
         }
         result
     }
@@ -58,11 +59,16 @@ mod tests {
     #[test]
     fn test() {
         let cases = vec![
-            (ListNode::from_vec(vec![7,0,8]), (ListNode::from_vec(vec![2,4,3]), ListNode::from_vec(vec![5,6,4]))),
+            (vec![], (vec![], vec![])),
+            (vec![7,0,8], (vec![7,0,8], vec![])),
+            (vec![7,0,8], (vec![], vec![7,0,8])),
+            (vec![7,0,8], (vec![2,4,3], vec![5,6,4])),
+            (vec![2,1,9], (vec![7,1,6], vec![5,9,2])),
+            (vec![2,1,1,1], (vec![7,1,6], vec![5,9,4])),
         ];
 
         for (expect, (l1, l2)) in cases {
-            assert_eq!(expect, Solution::add_two_numbers(l1, l2));
+            assert_eq!(expect, ListNode::into_vec(Solution::add_two_numbers(ListNode::from_vec(l1), ListNode::from_vec(l2))));
         }
     }
 }

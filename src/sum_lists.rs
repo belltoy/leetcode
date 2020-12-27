@@ -30,41 +30,38 @@
 //!
 use crate::ListNode;
 
+/// 这一题与 [add_two_numbers](super::add_two_numbers) 基本上一样，增加了进阶。
+///
+/// 进阶的问题，先反转链表，再做同样的操作。
 pub struct Solution;
 
 impl Solution {
     pub fn add_two_numbers(l1: Option<Box<ListNode>>, l2: Option<Box<ListNode>>) -> Option<Box<ListNode>> {
-        let mut sum = Some(Box::new(ListNode::new(0)));
-        let mut sum_tail = sum.as_mut();
-        let mut l1 = l1.as_ref();
-        let mut l2 = l2.as_ref();
-        let mut carry = 0;
+        let mut result: Option<Box<ListNode>> = None;
+        let mut tail = &mut result;
+        let mut t = (l1, l2, 0, 0); // (list1, list2, sum, carry)
         loop {
-            let s = match (l1, l2, carry) {
-                (None, None, 0) => break,
-                (None, None, 1) => 1,
-                (Some(n1), Some(n2), carry) => n1.val + n2.val + carry,
-                (Some(n), None, carry) | (None, Some(n), carry) => n.val + carry,
-                _ => unreachable!(),
+            t = match t {
+                (None, None, _, 0) => break,
+                (None, None, _, carry) => (None, None, carry, 0),
+                (Some(list), None, _, carry) | (None, Some(list), _, carry) if list.val + carry >= 10 => {
+                    (list.next, None, list.val + carry - 10, 1)
+                }
+                (Some(list), None, _, carry) | (None, Some(list), _, carry) => {
+                    (list.next, None, list.val + carry, 0)
+                }
+                (Some(l1), Some(l2), _, carry) if l1.val + l2.val + carry >= 10 => {
+                    (l1.next, l2.next, l1.val + l2.val + carry - 10, 1)
+                }
+                (Some(l1), Some(l2), _, carry) => {
+                    (l1.next, l2.next, l1.val + l2.val + carry, 0)
+                }
             };
 
-            let s = if s >= 10 {
-                carry = 1;
-                s - 10
-            } else {
-                carry = 0;
-                s
-            };
-
-            sum_tail = sum_tail.and_then(|tail| {
-                tail.next = Some(Box::new(ListNode::new(s)));
-                tail.next.as_mut()
-            });
-
-            l1 = l1.and_then(|n| n.next.as_ref());
-            l2 = l2.and_then(|n| n.next.as_ref());
+            *tail = Some(Box::new(ListNode::new(t.2)));
+            tail = &mut tail.as_mut().unwrap().next;
         }
-        sum.unwrap().next
+        result
     }
 }
 
@@ -74,8 +71,17 @@ mod tests {
 
     #[test]
     fn test() {
-        let t = |v1, v2| ListNode::into_vec(Solution::add_two_numbers(ListNode::from_vec(v1), ListNode::from_vec(v2)));
-        assert_eq!(vec![2,1,9], t(vec![7,1,6], vec![5,9,2]));
-        assert_eq!(vec![2,1,1,1], t(vec![7,1,6], vec![5,9,4]));
+        let cases = vec![
+            (vec![], (vec![], vec![])),
+            (vec![7,0,8], (vec![7,0,8], vec![])),
+            (vec![7,0,8], (vec![], vec![7,0,8])),
+            (vec![7,0,8], (vec![2,4,3], vec![5,6,4])),
+            (vec![2,1,9], (vec![7,1,6], vec![5,9,2])),
+            (vec![2,1,1,1], (vec![7,1,6], vec![5,9,4])),
+        ];
+
+        for (expect, (l1, l2)) in cases {
+            assert_eq!(expect, ListNode::into_vec(Solution::add_two_numbers(ListNode::from_vec(l1), ListNode::from_vec(l2))));
+        }
     }
 }

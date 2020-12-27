@@ -51,3 +51,4 @@ pub mod fibonacci_number;
 pub mod fibonacci_number_offer;
 pub mod minimum_path_sum;
 pub mod longest_absolute_file_path;
+pub mod number_of_good_pairs;

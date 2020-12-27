@@ -51,3 +51,23 @@ impl Solution {
         dummy.unwrap().next
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::list;
+
+    #[test]
+    fn test() {
+        let cases = vec![
+            (vec![4,1,9], (list![4,5,1,9], 5)),
+            (vec![4,5,9], (list![4,5,1,9], 1)),
+            (vec![], (list![], 1)),
+            (vec![4,1,9], (list![4,1,9], 3)),
+        ];
+
+        for (expect, (head, val)) in cases {
+            assert_eq!(expect, ListNode::into_vec(Solution::delete_node(head, val)));
+        }
+    }
+}

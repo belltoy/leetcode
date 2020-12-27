@@ -111,5 +111,6 @@ mod tests {
     fn test_from_vec() {
         let tree = tree![4,2,7,1,3,6,9];
         println!("{:?}", tree);
+        assert_eq!(None::<Option<Rc<RefCell<TreeNode>>>>, tree![]);
     }
 }

@@ -66,18 +66,21 @@ impl Solution {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::list;
 
     #[test]
     fn test() {
-        let t = |t| ListNode::into_vec(Solution::delete_duplicates(ListNode::from_vec(t)));
-        let t2 = |t| ListNode::into_vec(Solution::delete_duplicates_2(ListNode::from_vec(t)));
+        let t = |t| ListNode::into_vec(Solution::delete_duplicates(t));
+        let t2 = |t| ListNode::into_vec(Solution::delete_duplicates_2(t));
+        let cases = vec![
+            (vec![1,2,5], list![1,2,3,3,4,4,5]),
+            (vec![2,3], list![1,1,1,2,3]),
+            (vec![], list![]),
+        ];
 
-        assert_eq!(vec![1,2,5], t(vec![1,2,3,3,4,4,5]));
-        assert_eq!(vec![2,3], t(vec![1,1,1,2,3]));
-        assert_eq!(vec![0i32;0], t(vec![]));
-
-        assert_eq!(vec![1,2,5], t2(vec![1,2,3,3,4,4,5]));
-        assert_eq!(vec![2,3], t2(vec![1,1,1,2,3]));
-        assert_eq!(vec![0i32;0], t2(vec![]));
+        for (expect, input) in cases {
+            assert_eq!(expect, t(input.clone()));
+            assert_eq!(expect, t2(input));
+        }
     }
 }

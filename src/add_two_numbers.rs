@@ -55,20 +55,21 @@ impl Solution {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::list;
 
     #[test]
     fn test() {
         let cases = vec![
-            (vec![], (vec![], vec![])),
-            (vec![7,0,8], (vec![7,0,8], vec![])),
-            (vec![7,0,8], (vec![], vec![7,0,8])),
-            (vec![7,0,8], (vec![2,4,3], vec![5,6,4])),
-            (vec![2,1,9], (vec![7,1,6], vec![5,9,2])),
-            (vec![2,1,1,1], (vec![7,1,6], vec![5,9,4])),
+            (vec![], (list![], list![])),
+            (vec![7,0,8], (list![7,0,8], list![])),
+            (vec![7,0,8], (list![], list![7,0,8])),
+            (vec![7,0,8], (list![2,4,3], list![5,6,4])),
+            (vec![2,1,9], (list![7,1,6], list![5,9,2])),
+            (vec![2,1,1,1], (list![7,1,6], list![5,9,4])),
         ];
 
         for (expect, (l1, l2)) in cases {
-            assert_eq!(expect, ListNode::into_vec(Solution::add_two_numbers(ListNode::from_vec(l1), ListNode::from_vec(l2))));
+            assert_eq!(expect, ListNode::into_vec(Solution::add_two_numbers(l1, l2)));
         }
     }
 }

@@ -60,14 +60,21 @@ impl Solution {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::list;
 
     #[test]
     fn test() {
-        let t = |v, n| ListNode::into_vec(Solution::remove_nth_from_end(ListNode::from_vec(v), n));
-        assert_eq!(vec![1,2,3,5], t(vec![1,2,3,4,5], 2));
-        assert_eq!(vec![1,2,3,4], t(vec![1,2,3,4,5], 1));
-        assert_eq!(vec![2,3,4,5], t(vec![1,2,3,4,5], 5));
-        // invalid n=0
-        assert_eq!(vec![1,2,3,4,5], t(vec![1,2,3,4,5], 0));
+        let cases = vec![
+            (vec![1,2,3,5], (list![1,2,3,4,5], 2)),
+            (vec![1,2,3,4], (list![1,2,3,4,5], 1)),
+            (vec![2,3,4,5], (list![1,2,3,4,5], 5)),
+
+            // invalid n = 0
+            (vec![1,2,3,4,5], (list![1,2,3,4,5], 0)),
+        ];
+        let t = |v, n| ListNode::into_vec(Solution::remove_nth_from_end(v, n));
+        for (expect, (input, val)) in cases {
+            assert_eq!(expect, t(input, val));
+        }
     }
 }

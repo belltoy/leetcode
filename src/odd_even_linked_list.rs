@@ -60,12 +60,18 @@ impl Solution {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::list;
 
     #[test]
     fn test() {
-        let t = |v| ListNode::into_vec(Solution::odd_even_list(ListNode::from_vec(v)));
-        assert_eq!(vec![1,3,5,2,4], t(vec![1,2,3,4,5]));
-        assert_eq!(vec![2,3,6,7,1,5,4], t(vec![2,1,3,5,6,4,7]));
-        assert_eq!(vec![0i32;0], t(vec![]));
+        let cases = vec![
+            (vec![1,3,5,2,4], list![1,2,3,4,5]),
+            (vec![2,3,6,7,1,5,4], list![2,1,3,5,6,4,7]),
+            (vec![], list![]),
+        ];
+        let t = |v| ListNode::into_vec(Solution::odd_even_list(v));
+        for (expect, input) in cases {
+            assert_eq!(expect, t(input));
+        }
     }
 }

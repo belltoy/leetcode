@@ -38,12 +38,16 @@ impl Solution {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::list;
 
     #[test]
     fn test() {
-        let t = |v| Solution::reverse_print(ListNode::from_vec(v));
-
-        assert_eq!(vec![2,3,1], t(vec![1,3,2]));
-        assert_eq!(vec![0i32;0], t(vec![]));
+        let cases = vec![
+            (vec![2,3,1], list![1,3,2]),
+            (vec![], list![]),
+        ];
+        for (expect, input) in cases {
+            assert_eq!(expect, Solution::reverse_print(input));
+        }
     }
 }

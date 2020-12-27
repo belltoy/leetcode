@@ -36,11 +36,17 @@ impl Solution {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::list;
 
     #[test]
     fn test() {
-        let t = |v, t| ListNode::into_vec(Solution::remove_elements(ListNode::from_vec(v), t));
-        assert_eq!(vec![1,2,3,4,5], t(vec![1,2,6,3,4,5,6], 6));
-        assert_eq!(vec![0i32;0], t(vec![], 6));
+        let cases = vec![
+            (vec![1,2,3,4,5], (list![1,2,6,3,4,5,6], 6)),
+            (vec![], (list![], 6)),
+        ];
+        let t = |v, t| ListNode::into_vec(Solution::remove_elements(v, t));
+        for (expect, (input, val)) in cases {
+            assert_eq!(expect, t(input, val));
+        }
     }
 }

@@ -62,16 +62,17 @@ impl Solution {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::list;
 
     #[test]
     fn test() {
         let cases = vec![
-            (vec![], vec![]),
-            (vec![1,2], vec![2,1]),
-            (vec![5,4,3,2,1], vec![1,2,3,4,5]),
+            (vec![], list![]),
+            (vec![1,2], list![2,1]),
+            (vec![5,4,3,2,1], list![1,2,3,4,5]),
         ];
-        let t1 = |v| ListNode::into_vec(Solution::iterate(ListNode::from_vec(v)));
-        let t2 = |v| ListNode::into_vec(Solution::recursion(ListNode::from_vec(v)));
+        let t1 = |v| ListNode::into_vec(Solution::iterate(v));
+        let t2 = |v| ListNode::into_vec(Solution::recursion(v));
 
         for (expect, head) in cases {
             assert_eq!(expect, t1(head.clone()));

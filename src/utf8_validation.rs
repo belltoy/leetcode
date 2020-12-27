@@ -101,15 +101,23 @@ mod tests {
 
     #[test]
     fn test() {
-        let t = |v| Solution::valid_utf8(v);
-        assert_eq!(true, t(vec![0i32;0]));
-        assert_eq!(true, t(vec![197, 130, 1]));
+        let cases = vec![
+            (true, vec![
+             vec![],
+             vec![197, 130, 1],
+            ]),
 
-        assert_eq!(false, t(vec![235, 140, 4]));
-        assert_eq!(false, t(vec![0b1111_1111, 130, 1]));
-        assert_eq!(false, t(vec![0b1100_0000, 0b0000_1111]));
-        assert_eq!(false, t(vec![250,145,145,145,145]));
-        assert_eq!(false, t(vec![248,130,130,130]));
-        assert_eq!(false, t(vec![0b1011_0000, 130, 130]));
+            (false, vec![
+             vec![235, 140, 4],
+             vec![0b1111_1111, 130, 1],
+             vec![0b1100_0000, 0b0000_1111],
+             vec![250,145,145,145,145],
+             vec![248,130,130,130],
+             vec![0b1011_0000, 130, 130],
+            ]),
+        ];
+        for (expect, sub_cases) in cases {
+            sub_cases.into_iter().map(Solution::valid_utf8).for_each(|x| assert_eq!(expect, x));
+        }
     }
 }

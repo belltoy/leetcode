@@ -42,13 +42,19 @@ impl Solution {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::list;
 
     #[test]
     fn test() {
-        let t = |v| ListNode::into_vec(Solution::delete_duplicates(ListNode::from_vec(v)));
-        assert_eq!(vec![1,2], t(vec![1,1,2]));
-        assert_eq!(vec![1,2,3], t(vec![1,1,2,3,3]));
-        assert_eq!(vec![0i32;0], t(vec![]));
-        assert_eq!(vec![1,2], t(vec![1,2]));
+        let cases = vec![
+            (vec![1,2], list![1,1,2]),
+            (vec![1,2,3], list![1,1,2,3,3,]),
+            (vec![], list![]),
+            (vec![1,2], list![1,2]),
+        ];
+        let t = |v| ListNode::into_vec(Solution::delete_duplicates(v));
+        for (expect, input) in cases {
+            assert_eq!(expect, t(input));
+        }
     }
 }

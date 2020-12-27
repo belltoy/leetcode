@@ -37,7 +37,7 @@ pub struct Solution;
 
 impl Solution {
     pub fn add_two_numbers(l1: Option<Box<ListNode>>, l2: Option<Box<ListNode>>) -> Option<Box<ListNode>> {
-        let mut result: Option<Box<ListNode>> = None;
+        let mut result = None;
         let mut tail = &mut result;
         let mut t = (l1, l2, 0, 0); // (list1, list2, sum, carry)
         loop {

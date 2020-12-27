@@ -45,15 +45,13 @@ pub struct Solution;
 impl Solution {
     pub fn num_identical_pairs(nums: Vec<i32>) -> i32 {
         debug_assert!(nums.len() >= 1 && nums.len() <= 100);
-        nums.iter()
-            .fold(std::collections::HashMap::new(), |mut counts, &n| {
-                // debug_assert!(n >= 1 && n <= 100);
-                counts.entry(n).and_modify(|v| *v += 1).or_insert(1);
-                counts
-            })
-            .values()
-            .map(|v| v * (v - 1) / 2)
-            .sum()
+        nums.iter().fold(std::collections::HashMap::new(), |mut counts, &n| {
+            counts.entry(n).and_modify(|v| *v += 1).or_insert(1);
+            counts
+        })
+        .values()
+        .map(|v| v * (v - 1) / 2)
+        .sum()
     }
 }
 

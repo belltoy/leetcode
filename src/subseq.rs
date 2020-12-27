@@ -42,14 +42,11 @@ impl Solution {
 
     /// 类似双指针
     pub fn simple_match(s: &str, t: &str) -> bool {
-        let mut s = s.chars().peekable();
-        let mut t = t.chars();
-        while let (Some(&i), Some(j)) = (s.peek(), t.next()) {
-            if i == j {
-                s.next();
-            }
-        }
-        s.next().is_none()
+        t.chars().try_fold(s.chars().peekable(), |mut s, t| match s.peek() {
+            Some(&c) if c == t => { s.next(); Some(s) }
+            Some(_) => Some(s),
+            None => None, // short-circuiting
+        }).map_or(true, |mut s| s.next().is_none())
     }
 }
 
@@ -113,6 +110,11 @@ mod tests {
     fn test() {
         let t1 = |s: &str, t: &str| Solution::is_subsequence(s.into(), t.into());
         let t2 = |s: &str, t: &str| Matching::new(t.into()).is_match(s.into());
+
+        let s = "";
+        let t = "abc";
+        assert!(t1(s, t));
+        assert!(t2(s, t));
 
         let s = "abc";
         let t = "ahbgdc";

@@ -93,44 +93,6 @@ impl Solution {
 
         valid
     }
-
-    /// 另一种写法，用到了循环，不够直观。
-    pub fn valid_utf8_old(data: Vec<i32>) -> bool {
-        let mut iter = data.iter().map(|i| i.to_le_bytes()[0]);
-        while let Some(c) = iter.next() {
-            match c & 0b1000_0000 {
-                0 => continue,
-                _ => {
-                    let mut n = 1;
-                    let mut i = c;
-                    loop {
-                        i = i << 1;
-                        if i & 0b1000_0000 == 0 {
-                            break;
-                        } else {
-                            n += 1;
-                            if n > 4 {
-                                return false;
-                            }
-                        }
-                    }
-                    n -= 1;
-                    loop {
-                        if let Some(c) = iter.next() {
-                            if c & 0b1100_0000 != 0b1000_0000 {
-                                return false;
-                            }
-                        } else {
-                            return false;
-                        }
-                        n -= 1;
-                        if n <= 0 { break; }
-                    }
-                }
-            }
-        }
-        true
-    }
 }
 
 #[cfg(test)]

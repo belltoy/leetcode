@@ -1,4 +1,4 @@
-# Leetcode Rust Solutions
+# Leetcode Solutions in Rust
 
 See [doc](https://belltoy.github.io/leetcode-rs) for better reading experience.
 

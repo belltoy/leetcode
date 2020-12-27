@@ -70,22 +70,18 @@ impl Solution {
     /// 先把两个链表从高位到低位入栈，出栈的时候就是从低位到高位，可以和上面反向链表一样的处理方式。
     pub fn add_two_numbers_forward(l1: Option<Box<ListNode>>, l2: Option<Box<ListNode>>) -> Option<Box<ListNode>> {
         let (mut v1, mut v2) = (vec![], vec![]);
-        let mut lists = (l1, l2);
+        let mut lists = (l1, &mut v1, l2, &mut v2);
         loop {
             lists = match lists {
-                (None, None) => break,
-                (Some(n1), None) => {
-                    v1.push(n1.val);
-                    (n1.next, None)
+                (None, _, None, _) => break,
+                (Some(n), v, None, v2) | (None, v2, Some(n), v) => {
+                    v.push(n.val);
+                    (n.next, v, None, v2)
                 }
-                (None, Some(n2)) => {
-                    v2.push(n2.val);
-                    (None, n2.next)
-                }
-                (Some(n1), Some(n2)) => {
+                (Some(n1), v1, Some(n2), v2) => {
                     v1.push(n1.val);
                     v2.push(n2.val);
-                    (n1.next, n2.next)
+                    (n1.next, v1, n2.next, v2)
                 }
             };
         }

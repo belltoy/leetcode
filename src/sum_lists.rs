@@ -36,6 +36,7 @@ use crate::ListNode;
 pub struct Solution;
 
 impl Solution {
+    /// 反向链表，即从低位到高位，每位相加，记录进位。
     pub fn add_two_numbers(l1: Option<Box<ListNode>>, l2: Option<Box<ListNode>>) -> Option<Box<ListNode>> {
         let mut result = None;
         let mut tail = &mut result;

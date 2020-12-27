@@ -74,22 +74,17 @@ pub struct Solution;
 
 impl Solution {
 
-    /// 使用 `Iterator` 操作会很简
+    /// 使用 `Iterator` 操作会很简单
     pub fn simplify_path(path: String) -> String {
         let paths = path
             .split('/')
             .filter(|&p| p != "." && !p.is_empty())
             .fold(vec![], |mut acc, p| {
                 match p {
-                    ".." => {
-                        acc.pop();
-                        acc
-                    }
-                    p => {
-                        acc.push(p);
-                        acc
-                    }
+                    ".." => drop(acc.pop()),
+                    p => acc.push(p),
                 }
+                acc
             })
             .join("/");
 

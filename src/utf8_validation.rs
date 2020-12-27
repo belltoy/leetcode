@@ -61,55 +61,37 @@ impl Solution {
     pub fn valid_utf8(data: Vec<i32>) -> bool {
         // 取低 8 位，根据题目输入数据的限制，`as u8` 也行。
         // `fuse()` 保证到结尾后多次调用 `.next()` 依然返回 `None`
-        let mut data = data.iter().map(|&i| i.to_le_bytes()[0]).fuse();
-        while let Some(n) = data.next() {
-            match n {
+        let mut t = data.iter().map(|&i| i.to_le_bytes()[0]).fuse();
+        let mut valid = true;
+        while let (Some(n), true) = (t.next(), valid) {
+            valid = match n {
                 // 前缀越界，因为 UTF-8 只能是 1 到 4 字节，前缀不可能是 5 位或以上的 1 开头
-                n if n & 0b1111_1000 == 0b1111_1000 => {
-                    return false;
-                }
+                n if n & 0b1111_1000 == 0b1111_1000 => false,
                 // 4 字节情况，取后三位检查
-                n if n & 0b1111_0000 == 0b1111_0000 => {
-                    match(data.next(), data.next(), data.next()) {
-                        (Some(n1), Some(n2), Some(n3)) if n1 & n2 & n3 & 0b1000_0000 == 0b1000_0000 => {
-                            continue;
-                        }
-                        _ => return false,
-                    }
+                n if n & 0b1111_0000 == 0b1111_0000 => match (t.next(), t.next(), t.next()) {
+                    (Some(n1), Some(n2), Some(n3)) if n1 & n2 & n3 & 0b1000_0000 == 0b1000_0000 => true,
+                    _ => false,
                 }
                 // 3 字节情况，取后两位检查
-                n if n & 0b1110_0000 == 0b1110_0000 => {
-                    match (data.next(), data.next()) {
-                        (Some(n1), Some(n2)) if n1 & n2 & 0b1000_0000 == 0b1000_0000 => {
-                            continue;
-                        }
-                        _ => return false,
-                    }
+                n if n & 0b1110_0000 == 0b1110_0000 => match (t.next(), t.next()) {
+                    (Some(n1), Some(n2)) if n1 & n2 & 0b1000_0000 == 0b1000_0000 => true,
+                    _ => false,
                 }
                 // 2 字节情况，取后一位检查
-                n if n & 0b1100_0000 == 0b1100_0000 => {
-                    match data.next() {
-                        Some(n1) if n1 & 0b1000_0000 == 0b1000_0000 => {
-                            continue;
-                        }
-                        _ => return false,
-                    }
+                n if n & 0b1100_0000 == 0b1100_0000 => match t.next() {
+                    Some(n1) if n1 & 0b1000_0000 == 0b1000_0000 => true,
+                    _ => false,
                 }
                 // 1 字节情况
                 // 只要是 `0xxx_xxxx` 以 `0` 开头就 OK
                 // 注意，这里排除了 `10xx_xxxx` 开头的情况，这种情况是不符合规则的
-                n if n & 0b1000_0000 == 0 => {
-                    continue;
-                }
+                n if n & 0b1000_0000 == 0 => true,
                 // 其它情况，均不符合规则
-                _ => {
-                    return false;
-                }
-            }
+                _ => false,
+            };
         }
 
-        // 所有字节都符合
-        true
+        valid
     }
 
     /// 另一种写法，用到了循环，不够直观。

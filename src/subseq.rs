@@ -40,19 +40,16 @@ impl Solution {
         Self::simple_match(&s, &t)
     }
 
-    /// 双指针
+    /// 类似双指针
     pub fn simple_match(s: &str, t: &str) -> bool {
-        let (mut i, mut j) = (0, 0);
-        let (s, t) = (s.chars().collect::<Vec<_>>(), t.chars().collect::<Vec<_>>());
-        let (s_len, t_len) = (s.len(), t.len());
-        while i < s_len && j < t_len {
-            if s[i] == t[j] {
-                i += 1;
+        let mut s = s.chars().peekable();
+        let mut t = t.chars();
+        while let (Some(&i), Some(j)) = (s.peek(), t.next()) {
+            if i == j {
+                s.next();
             }
-            j += 1;
         }
-
-        i == s_len
+        s.next().is_none()
     }
 }
 

@@ -1,0 +1,45 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `max_sliding_window` mod in crate `leetcode`."><meta name="keywords" content="rust, rustlang, rust-lang, max_sliding_window"><title>leetcode::max_sliding_window - Rust</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+<link rel="alternate icon" type="image/png" href="../../favicon-16x16.png">
+<link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc mod"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../leetcode/index.html'><div class='logo-container rust-logo'><img src='../../rust-logo.png' alt='logo'></div></a><p class='location'>Module max_sliding_window</p><div class="sidebar-elems"><div class="block items"><ul><li><a href="#structs">Structs</a></li></ul></div><p class='location'><a href='../index.html'>leetcode</a></p><script>window.sidebarCurrent = {name: 'max_sliding_window', ty: 'mod', relpath: '../'};</script><script defer src="../sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+                <a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class='fqn'><span class='out-of-band'><span id='render-detail'><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class='inner'>&#x2212;</span>]</a></span><a class='srclink' href='../../src/leetcode/max_sliding_window.rs.html#1-120' title='goto source code'>[src]</a></span><span class='in-band'>Module <a href='../index.html'>leetcode</a>::<wbr><a class="mod" href=''>max_sliding_window</a></span></h1><div class='docblock'><h1 id="239-滑动窗口最大值" class="section-header"><a href="#239-滑动窗口最大值">239. 滑动窗口最大值</a></h1>
+<p>难度 困难</p>
+<p>给你一个整数数组 nums，有一个大小为 k 的滑动窗口从数组的最左侧移动到数组的最右侧。你只可以看到在滑动窗口内的 k 个数字。滑动窗口每次只向右移动一位。</p>
+<p>返回滑动窗口中的最大值。</p>
+<h2 id="示例-1" class="section-header"><a href="#示例-1">示例 1：</a></h2>
+<pre><code class="language-text">输入：nums = [1,3,-1,-3,5,3,6,7], k = 3
+输出：[3,3,5,5,6,7]
+解释：
+滑动窗口的位置                最大值
+---------------               -----
+[1  3  -1] -3  5  3  6  7       3
+ 1 [3  -1  -3] 5  3  6  7       3
+ 1  3 [-1  -3  5] 3  6  7       5
+ 1  3  -1 [-3  5  3] 6  7       5
+ 1  3  -1  -3 [5  3  6] 7       6
+ 1  3  -1  -3  5 [3  6  7]      7
+</code></pre>
+<h2 id="示例-2" class="section-header"><a href="#示例-2">示例 2：</a></h2>
+<pre><code class="language-text">输入：nums = [1], k = 1
+输出：[1]
+</code></pre>
+<h2 id="示例-3" class="section-header"><a href="#示例-3">示例 3：</a></h2>
+<pre><code class="language-text">输入：nums = [1,-1], k = 1
+输出：[1,-1]
+</code></pre>
+<h2 id="示例-4" class="section-header"><a href="#示例-4">示例 4：</a></h2>
+<pre><code class="language-text">输入：nums = [9,11], k = 2
+输出：[11]
+</code></pre>
+<h2 id="示例-5" class="section-header"><a href="#示例-5">示例 5：</a></h2>
+<pre><code class="language-text">输入：nums = [4,-2], k = 2
+输出：[4]
+</code></pre>
+<h2 id="提示" class="section-header"><a href="#提示">提示：</a></h2>
+<ul>
+<li><code>1 &lt;= nums.length &lt;= 10^5</code></li>
+<li><code>-104 &lt;= nums[i] &lt;= 10^4</code></li>
+<li><code>1 &lt;= k &lt;= nums.length</code></li>
+</ul>
+<p>See <a href="https://leetcode-cn.com/problems/sliding-window-maximum/">leetcode</a></p>
+</div><h2 id='structs' class='section-header'><a href="#structs">Structs</a></h2>
+<table><tr class='module-item'><td><a class="struct" href="struct.Solution.html" title='leetcode::max_sliding_window::Solution struct'>Solution</a></td><td class='docblock-short'></td></tr></table></section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../";window.currentCrate = "leetcode";</script><script src="../../main.js"></script><script defer src="../../search-index.js"></script></body></html>

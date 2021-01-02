@@ -1,0 +1,35 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `valid_number` mod in crate `leetcode`."><meta name="keywords" content="rust, rustlang, rust-lang, valid_number"><title>leetcode::valid_number - Rust</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+<link rel="alternate icon" type="image/png" href="../../favicon-16x16.png">
+<link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc mod"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../leetcode/index.html'><div class='logo-container rust-logo'><img src='../../rust-logo.png' alt='logo'></div></a><p class='location'>Module valid_number</p><div class="sidebar-elems"><div class="block items"><ul><li><a href="#structs">Structs</a></li></ul></div><p class='location'><a href='../index.html'>leetcode</a></p><script>window.sidebarCurrent = {name: 'valid_number', ty: 'mod', relpath: '../'};</script><script defer src="../sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+                <a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class='fqn'><span class='out-of-band'><span id='render-detail'><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class='inner'>&#x2212;</span>]</a></span><a class='srclink' href='../../src/leetcode/valid_number.rs.html#1-200' title='goto source code'>[src]</a></span><span class='in-band'>Module <a href='../index.html'>leetcode</a>::<wbr><a class="mod" href=''>valid_number</a></span></h1><div class='docblock'><h1 id="65-有效数字" class="section-header"><a href="#65-有效数字">65. 有效数字</a></h1>
+<p>难度 困难</p>
+<p>验证给定的字符串是否可以解释为十进制数字。</p>
+<p>例如:</p>
+<ul>
+<li><code>&quot;0&quot;</code> =&gt; <code>true</code></li>
+<li><code>&quot; 0.1 &quot;</code> =&gt; <code>true</code></li>
+<li><code>&quot;abc&quot;</code> =&gt; <code>false</code></li>
+<li><code>&quot;1 a&quot;</code> =&gt; <code>false</code></li>
+<li><code>&quot;2e10&quot;</code> =&gt; <code>true</code></li>
+<li><code>&quot; -90e3   &quot;</code> =&gt; <code>true</code></li>
+<li><code>&quot; 1e&quot;</code> =&gt; <code>false</code></li>
+<li><code>&quot;e3&quot;</code> =&gt; <code>false</code></li>
+<li><code>&quot; 6e-1&quot;</code> =&gt; <code>true</code></li>
+<li><code>&quot; 99e2.5 &quot;</code> =&gt; <code>false</code></li>
+<li><code>&quot;53.5e93&quot;</code> =&gt; <code>true</code></li>
+<li><code>&quot; --6 &quot;</code> =&gt; <code>false</code></li>
+<li><code>&quot;-+3&quot;</code> =&gt; <code>false</code></li>
+<li><code>&quot;95a54e53&quot;</code> =&gt; <code>false</code></li>
+</ul>
+<p>说明: 我们有意将问题陈述地比较模糊。在实现代码之前，你应当事先思考所有可能的情况。这里给出一份可能存在于有效十进制数字中的字符列表：</p>
+<ul>
+<li>数字 0-9</li>
+<li>指数 - &quot;e&quot;</li>
+<li>正/负号 - &quot;+&quot;/&quot;-&quot;</li>
+<li>小数点 - &quot;.&quot;</li>
+</ul>
+<p>当然，在输入中，这些字符的上下文也很重要。</p>
+<p>See <a href="https://leetcode-cn.com/problems/valid-number/">leetcode</a></p>
+</div><h2 id='structs' class='section-header'><a href="#structs">Structs</a></h2>
+<table><tr class='module-item'><td><a class="struct" href="struct.Solution.html" title='leetcode::valid_number::Solution struct'>Solution</a></td><td class='docblock-short'><p>DFA</p>
+</td></tr></table></section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../";window.currentCrate = "leetcode";</script><script src="../../main.js"></script><script defer src="../../search-index.js"></script></body></html>

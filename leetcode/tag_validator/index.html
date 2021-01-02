@@ -1,0 +1,82 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `tag_validator` mod in crate `leetcode`."><meta name="keywords" content="rust, rustlang, rust-lang, tag_validator"><title>leetcode::tag_validator - Rust</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+<link rel="alternate icon" type="image/png" href="../../favicon-16x16.png">
+<link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc mod"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../leetcode/index.html'><div class='logo-container rust-logo'><img src='../../rust-logo.png' alt='logo'></div></a><p class='location'>Module tag_validator</p><div class="sidebar-elems"><div class="block items"><ul><li><a href="#structs">Structs</a></li></ul></div><p class='location'><a href='../index.html'>leetcode</a></p><script>window.sidebarCurrent = {name: 'tag_validator', ty: 'mod', relpath: '../'};</script><script defer src="../sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+                <a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class='fqn'><span class='out-of-band'><span id='render-detail'><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class='inner'>&#x2212;</span>]</a></span><a class='srclink' href='../../src/leetcode/tag_validator.rs.html#1-353' title='goto source code'>[src]</a></span><span class='in-band'>Module <a href='../index.html'>leetcode</a>::<wbr><a class="mod" href=''>tag_validator</a></span></h1><div class='docblock'><h1 id="591-标签验证器" class="section-header"><a href="#591-标签验证器">591. 标签验证器</a></h1>
+<p>难度 困难</p>
+<p>给定一个表示代码片段的字符串，你需要实现一个验证器来解析这段代码，并返回它是否合法。合法的代码片段需要遵守以下的所有规则：</p>
+<ol>
+<li>代码必须被合法的闭合标签包围。否则，代码是无效的。</li>
+<li>闭合标签（不一定合法）要严格符合格式：<code>&lt;TAG_NAME&gt;TAG_CONTENT&lt;/TAG_NAME&gt;</code>。其中，<code>&lt;TAG_NAME&gt;</code> 是起始标签，<code>&lt;/TAG_NAME&gt;</code> 是结束标签。起始和结束标签中的 <code>TAG_NAME</code> 应当相同。当且仅当 <code>TAG_NAME</code> 和 <code>TAG_CONTENT</code> 都是合法的，闭合标签才是合法的。</li>
+<li>合法的 <code>TAG_NAME</code> 仅含有大写字母，长度在范围 <code>[1,9]</code> 之间。否则，该 <code>TAG_NAME</code> 是不合法的。</li>
+<li>合法的 <code>TAG_CONTENT</code> 可以包含其他合法的闭合标签，<code>cdata</code> （请参考规则7）和任意字符（注意参考规则1）除了不匹配的 <code>&lt;</code>、不匹配的起始和结束标签、不匹配的或带有不合法 <code>TAG_NAME</code> 的闭合标签。否则，<code>TAG_CONTENT</code> 是不合法的。</li>
+<li>一个起始标签，如果没有具有相同 <code>TAG_NAME</code> 的结束标签与之匹配，是不合法的。反之亦然。不过，你也需要考虑标签嵌套的问题。</li>
+<li>一个&lt;，如果你找不到一个后续的 <code>&gt;</code> 与之匹配，是不合法的。并且当你找到一个 <code>&lt;</code> 或 <code>&lt;/</code> 时，所有直到下一个 <code>&gt;</code> 的前的字符，都应当被解析为 <code>TAG_NAME</code>（不一定合法）。</li>
+<li><code>cdata</code> 有如下格式：<code>&lt;![CDATA[CDATA_CONTENT]]&gt;</code> 。<code>CDATA_CONTENT</code> 的范围被定义成 <code>&lt;![CDATA[ 和后续的第一个 ]]&gt;</code> 之间的字符。</li>
+<li><code>CDATA_CONTENT</code> 可以包含任意字符。<code>cdata</code> 的功能是阻止验证器解析 <code>CDATA_CONTENT</code>，所以即使其中有一些字符可以被解析为标签（无论合法还是不合法），也应该将它们视为常规字符。</li>
+</ol>
+<p>合法代码的例子:</p>
+<pre><code class="language-text">输入: &quot;&lt;DIV&gt;This is the first line &lt;![CDATA[&lt;div&gt;]]&gt;&lt;/DIV&gt;&quot;
+
+输出: True
+
+解释:
+
+代码被包含在了闭合的标签内： &lt;DIV&gt; 和 &lt;/DIV&gt; 。
+
+TAG_NAME 是合法的，TAG_CONTENT 包含了一些字符和 cdata 。
+
+即使 CDATA_CONTENT 含有不匹配的起始标签和不合法的 TAG_NAME，它应该被视为普通的文本，而不是标签。
+
+所以 TAG_CONTENT 是合法的，因此代码是合法的。最终返回True。
+
+
+输入: &quot;&lt;DIV&gt;&gt;&gt;  ![cdata[]] &lt;![CDATA[&lt;div&gt;]&gt;]]&gt;]]&gt;&gt;]&lt;/DIV&gt;&quot;
+
+输出: True
+
+解释:
+
+我们首先将代码分割为： start_tag|tag_content|end_tag 。
+
+start_tag -&gt; &quot;&lt;DIV&gt;&quot;
+
+end_tag -&gt; &quot;&lt;/DIV&gt;&quot;
+
+tag_content 也可被分割为： text1|cdata|text2 。
+
+text1 -&gt; &quot;&gt;&gt;  ![cdata[]] &quot;
+
+cdata -&gt; &quot;&lt;![CDATA[&lt;div&gt;]&gt;]]&gt;&quot; ，其中 CDATA_CONTENT 为 &quot;&lt;div&gt;]&gt;&quot;
+
+text2 -&gt; &quot;]]&gt;&gt;]&quot;
+
+
+start_tag 不是 &quot;&lt;DIV&gt;&gt;&gt;&quot; 的原因参照规则 6 。
+cdata 不是 &quot;&lt;![CDATA[&lt;div&gt;]&gt;]]&gt;]]&gt;&quot; 的原因参照规则 7 。
+</code></pre>
+<p>不合法代码的例子:</p>
+<pre><code class="language-text">输入: &quot;&lt;A&gt;  &lt;B&gt; &lt;/A&gt;   &lt;/B&gt;&quot;
+输出: False
+解释: 不合法。如果 &quot;&lt;A&gt;&quot; 是闭合的，那么 &quot;&lt;B&gt;&quot; 一定是不匹配的，反之亦然。
+
+输入: &quot;&lt;DIV&gt;  div tag is not closed  &lt;DIV&gt;&quot;
+输出: False
+
+输入: &quot;&lt;DIV&gt;  unmatched &lt;  &lt;/DIV&gt;&quot;
+输出: False
+
+输入: &quot;&lt;DIV&gt; closed tags with invalid tag name  &lt;b&gt;123&lt;/b&gt; &lt;/DIV&gt;&quot;
+输出: False
+
+输入: &quot;&lt;DIV&gt; unmatched tags with invalid tag name  &lt;/1234567890&gt; and &lt;CDATA[[]]&gt;  &lt;/DIV&gt;&quot;
+输出: False
+
+输入: &quot;&lt;DIV&gt;  unmatched start tag &lt;B&gt;  and unmatched end tag &lt;/C&gt;  &lt;/DIV&gt;&quot;
+输出: False
+</code></pre>
+<h2 id="注意" class="section-header"><a href="#注意">注意:</a></h2>
+<p>为简明起见，你可以假设输入的代码（包括提到的任意字符）只包含<code>数字</code>, <code>字母</code>, <code>'&lt;','&gt;','/','!','[',']'</code> 和 <code>' '</code>。</p>
+<p>See <a href="https://leetcode-cn.com/problems/tag-validator/">leetcode</a></p>
+</div><h2 id='structs' class='section-header'><a href="#structs">Structs</a></h2>
+<table><tr class='module-item'><td><a class="struct" href="struct.Solution.html" title='leetcode::tag_validator::Solution struct'>Solution</a></td><td class='docblock-short'><p>用有限状态机，处理几个有限的状态就解决了。</p>
+</td></tr></table></section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../";window.currentCrate = "leetcode";</script><script src="../../main.js"></script><script defer src="../../search-index.js"></script></body></html>

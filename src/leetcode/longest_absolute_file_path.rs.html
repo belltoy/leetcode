@@ -1,0 +1,304 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `src/longest_absolute_file_path.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>longest_absolute_file_path.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+<link rel="alternate icon" type="image/png" href="../../favicon-16x16.png">
+<link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../leetcode/index.html'><div class='logo-container rust-logo'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+                <a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
+<span id="2">  2</span>
+<span id="3">  3</span>
+<span id="4">  4</span>
+<span id="5">  5</span>
+<span id="6">  6</span>
+<span id="7">  7</span>
+<span id="8">  8</span>
+<span id="9">  9</span>
+<span id="10"> 10</span>
+<span id="11"> 11</span>
+<span id="12"> 12</span>
+<span id="13"> 13</span>
+<span id="14"> 14</span>
+<span id="15"> 15</span>
+<span id="16"> 16</span>
+<span id="17"> 17</span>
+<span id="18"> 18</span>
+<span id="19"> 19</span>
+<span id="20"> 20</span>
+<span id="21"> 21</span>
+<span id="22"> 22</span>
+<span id="23"> 23</span>
+<span id="24"> 24</span>
+<span id="25"> 25</span>
+<span id="26"> 26</span>
+<span id="27"> 27</span>
+<span id="28"> 28</span>
+<span id="29"> 29</span>
+<span id="30"> 30</span>
+<span id="31"> 31</span>
+<span id="32"> 32</span>
+<span id="33"> 33</span>
+<span id="34"> 34</span>
+<span id="35"> 35</span>
+<span id="36"> 36</span>
+<span id="37"> 37</span>
+<span id="38"> 38</span>
+<span id="39"> 39</span>
+<span id="40"> 40</span>
+<span id="41"> 41</span>
+<span id="42"> 42</span>
+<span id="43"> 43</span>
+<span id="44"> 44</span>
+<span id="45"> 45</span>
+<span id="46"> 46</span>
+<span id="47"> 47</span>
+<span id="48"> 48</span>
+<span id="49"> 49</span>
+<span id="50"> 50</span>
+<span id="51"> 51</span>
+<span id="52"> 52</span>
+<span id="53"> 53</span>
+<span id="54"> 54</span>
+<span id="55"> 55</span>
+<span id="56"> 56</span>
+<span id="57"> 57</span>
+<span id="58"> 58</span>
+<span id="59"> 59</span>
+<span id="60"> 60</span>
+<span id="61"> 61</span>
+<span id="62"> 62</span>
+<span id="63"> 63</span>
+<span id="64"> 64</span>
+<span id="65"> 65</span>
+<span id="66"> 66</span>
+<span id="67"> 67</span>
+<span id="68"> 68</span>
+<span id="69"> 69</span>
+<span id="70"> 70</span>
+<span id="71"> 71</span>
+<span id="72"> 72</span>
+<span id="73"> 73</span>
+<span id="74"> 74</span>
+<span id="75"> 75</span>
+<span id="76"> 76</span>
+<span id="77"> 77</span>
+<span id="78"> 78</span>
+<span id="79"> 79</span>
+<span id="80"> 80</span>
+<span id="81"> 81</span>
+<span id="82"> 82</span>
+<span id="83"> 83</span>
+<span id="84"> 84</span>
+<span id="85"> 85</span>
+<span id="86"> 86</span>
+<span id="87"> 87</span>
+<span id="88"> 88</span>
+<span id="89"> 89</span>
+<span id="90"> 90</span>
+<span id="91"> 91</span>
+<span id="92"> 92</span>
+<span id="93"> 93</span>
+<span id="94"> 94</span>
+<span id="95"> 95</span>
+<span id="96"> 96</span>
+<span id="97"> 97</span>
+<span id="98"> 98</span>
+<span id="99"> 99</span>
+<span id="100">100</span>
+<span id="101">101</span>
+<span id="102">102</span>
+<span id="103">103</span>
+<span id="104">104</span>
+<span id="105">105</span>
+<span id="106">106</span>
+<span id="107">107</span>
+<span id="108">108</span>
+<span id="109">109</span>
+<span id="110">110</span>
+<span id="111">111</span>
+<span id="112">112</span>
+<span id="113">113</span>
+<span id="114">114</span>
+<span id="115">115</span>
+<span id="116">116</span>
+<span id="117">117</span>
+<span id="118">118</span>
+<span id="119">119</span>
+<span id="120">120</span>
+<span id="121">121</span>
+<span id="122">122</span>
+<span id="123">123</span>
+<span id="124">124</span>
+<span id="125">125</span>
+<span id="126">126</span>
+<span id="127">127</span>
+<span id="128">128</span>
+<span id="129">129</span>
+<span id="130">130</span>
+<span id="131">131</span>
+<span id="132">132</span>
+<span id="133">133</span>
+<span id="134">134</span>
+<span id="135">135</span>
+<span id="136">136</span>
+<span id="137">137</span>
+<span id="138">138</span>
+<span id="139">139</span>
+<span id="140">140</span>
+<span id="141">141</span>
+<span id="142">142</span>
+<span id="143">143</span>
+<span id="144">144</span>
+<span id="145">145</span>
+<span id="146">146</span>
+<span id="147">147</span>
+<span id="148">148</span>
+<span id="149">149</span>
+</pre><div class="example-wrap"><pre class="rust ">
+<span class="doccomment">//! # 388. 文件的最长绝对路径</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! 难度 中等</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! 假设文件系统如下图所示：![](https://assets.leetcode.com/uploads/2020/08/28/mdir.jpg)</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! 这里将 `dir` 作为根目录中的唯一目录。`dir` 包含两个子目录 `subdir1` 和 `subdir2` 。`subdir1` 包含文件 `file1.ext` 和子目录 `subsubdir1`；`subdir2` 包含子目录 `subsubdir2`，该子目录下包含文件 `file2.ext` 。</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! 在文本格式中，如下所示(⟶表示制表符)：</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! ```text</span>
+<span class="doccomment">//! dir</span>
+<span class="doccomment">//! ⟶ subdir1</span>
+<span class="doccomment">//! ⟶ ⟶ file1.ext</span>
+<span class="doccomment">//! ⟶ ⟶ subsubdir1</span>
+<span class="doccomment">//! ⟶ subdir2</span>
+<span class="doccomment">//! ⟶ ⟶ subsubdir2</span>
+<span class="doccomment">//! ⟶ ⟶ ⟶ file2.ext</span>
+<span class="doccomment">//! ```</span>
+<span class="doccomment">//! 如果是代码表示，上面的文件系统可以写为 `&quot;dir\n\tsubdir1\n\t\tfile1.ext\n\t\tsubsubdir1\n\tsubdir2\n\t\tsubsubdir2\n\t\t\tfile2.ext&quot;` 。`&#39;\n&#39;` 和 `&#39;\t&#39;` 分别是换行符和制表符。</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! 文件系统中的每个文件和文件夹都有一个唯一的 绝对路径 ，即必须打开才能到达文件/目录所在位置的目录顺序，所有路径用 `&#39;/&#39;` 连接。上面例子中，指向 `file2.ext` 的绝对路径是 `&quot;dir/subdir2/subsubdir2/file2.ext&quot;` 。每个目录名由字母、数字和/或空格组成，每个文件名遵循 `name.extension` 的格式，其中名称和扩展名由字母、数字和/或空格组成。</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! 给定一个以上述格式表示文件系统的字符串 `input` ，返回文件系统中 **指向文件的最长绝对路径** 的长度。 如果系统中没有文件，返回 `0`。</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! ## 示例 1：</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! ![](https://assets.leetcode.com/uploads/2020/08/28/dir1.jpg)</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! ```text</span>
+<span class="doccomment">//! 输入：input = &quot;dir\n\tsubdir1\n\tsubdir2\n\t\tfile.ext&quot;</span>
+<span class="doccomment">//! 输出：20</span>
+<span class="doccomment">//! 解释：只有一个文件，绝对路径为 &quot;dir/subdir2/file.ext&quot; ，路径长度 20</span>
+<span class="doccomment">//! 路径 &quot;dir/subdir1&quot; 不含任何文件</span>
+<span class="doccomment">//! ```</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! ## 示例 2：</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! ![](https://assets.leetcode.com/uploads/2020/08/28/dir2.jpg)</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! ```text</span>
+<span class="doccomment">//! 输入：input = &quot;dir\n\tsubdir1\n\t\tfile1.ext\n\t\tsubsubdir1\n\tsubdir2\n\t\tsubsubdir2\n\t\t\tfile2.ext&quot;</span>
+<span class="doccomment">//! 输出：32</span>
+<span class="doccomment">//! 解释：存在两个文件：</span>
+<span class="doccomment">//! &quot;dir/subdir1/file1.ext&quot; ，路径长度 21</span>
+<span class="doccomment">//! &quot;dir/subdir2/subsubdir2/file2.ext&quot; ，路径长度 32</span>
+<span class="doccomment">//! 返回 32 ，因为这是最长的路径</span>
+<span class="doccomment">//! ```</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! ## 示例 3：</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! ```text</span>
+<span class="doccomment">//! 输入：input = &quot;a&quot;</span>
+<span class="doccomment">//! 输出：0</span>
+<span class="doccomment">//! 解释：不存在任何文件</span>
+<span class="doccomment">//! ```</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! ## 示例 4：</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! ```text</span>
+<span class="doccomment">//! 输入：input = &quot;file1.txt\nfile2.txt\nlongfile.txt&quot;</span>
+<span class="doccomment">//! 输出：12</span>
+<span class="doccomment">//! 解释：根目录下有 3 个文件。</span>
+<span class="doccomment">//! 因为根目录中任何东西的绝对路径只是名称本身，所以答案是 &quot;longfile.txt&quot; ，路径长度为 12</span>
+<span class="doccomment">//! ```</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! ## 提示：</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! * 1 &lt;= input.length &lt;= 10&lt;sup&gt;4&lt;/sup&gt;</span>
+<span class="doccomment">//! * `input` 可能包含小写或大写的英文字母，一个换行符 `&#39;\n&#39;`，一个指表符 `&#39;\t&#39;`，一个点 `&#39;.&#39;`，一个空格 `&#39; &#39;`，和数字。</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! See [leetcode](https://leetcode-cn.com/problems/longest-absolute-file-path/)</span>
+
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Solution</span>;
+
+<span class="kw">impl</span> <span class="ident">Solution</span> {
+
+    <span class="doccomment">/// 用 Rust 的 `Iterator` 写函数式的解法。</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// 先把输入拆分，因为每个片断都包含了文件名，路径深度和目录文件类型，对片断预处理。因为字符串表示是顺序表示的，所以前后之间是需要处理的。详细步骤说明：</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// * 按 `\n` 切分输入 `split(&#39;\n&#39;)`</span>
+    <span class="doccomment">/// * 把每个 `\t\tfile_name` 映射成 `(level, file_name_length, is_file)`，这里的 `level` 从 `0` 开始（即根目录 level 为 `0`）</span>
+    <span class="doccomment">///     * 找到第一个不是 `\t` 的字符的位置，position 表示 `\t` 个数，即 level 层级，剩下的即文件名，我们取其长度即可，同时判断是否为文件（文件名中是否带 `.`）</span>
+    <span class="doccomment">///     * 如果没有 `\t` 说明是在根目录下的，即 `level` 为 `0`</span>
+    <span class="doccomment">/// * 计算每一个目录/文件名的长度（根据上一步生成的 tuple），因为每次分析都需要用到之前的路径在哪一层，所以需要用到 state 状态（栈），计算结果是每个目录/文件的长度，所以用 `scan`</span>
+    <span class="doccomment">///     * 初始状态是 `[]`，这里的状态表示**上一次**的父目录的绝对路径长度，即 `[level_0_len, level_1_len, level_2_len, ...]`</span>
+    <span class="doccomment">///     * 进入到当前目录/文件，需要弹出上一次的父目录，直到 `parents` 里只剩当前目录/文件的父级（这里用 `split_off(at)` 来简化多次 `pop()`</span>
+    <span class="doccomment">///     * 当前级别的目录/文件的长度就是剩下的 `parents` 里最后一个父目录的绝对路径长度和 + 当前文件名长度</span>
+    <span class="doccomment">///     * 如果当前是目录，则当前目录长度 `push` 入栈，注意需要 `+ 1` 表示算上 `/`</span>
+    <span class="doccomment">///     * `scan` 函数的参数函数里，返回 `(abs_len, is_file`) （注：`scan` 函数相当于是 `fold` + `map`，或者说 `map` 带了个 state 状态）</span>
+    <span class="doccomment">/// * 经过上一步，转换的结果已经变成 `(abs_len, is_file)` 了，只要过滤掉不是文件的项</span>
+    <span class="doccomment">/// * 然后找出 `max` 就是结果了</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// 这里除了 `scan` 中每一步过程中需要更新 `parents` 这个状态，其它地方没有任何的 mutable 变量。函数式编程的方式逻辑非常清晰，代码写起来也非常方便，可读性高，加上 immutable 使得安全性也非常好。关键是在 Rust 里用函数式的方法几乎不损失性能。</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">length_longest_path</span>(<span class="ident">input</span>: <span class="ident">String</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">i32</span> {
+        <span class="ident">input</span>
+            .<span class="ident">split</span>(<span class="string">&#39;\n&#39;</span>)
+            .<span class="ident">map</span>(<span class="op">|</span><span class="ident">s</span><span class="op">|</span> {
+                <span class="ident">s</span>.<span class="ident">find</span>(<span class="op">|</span><span class="ident">c</span><span class="op">|</span> <span class="ident">c</span> <span class="op">!</span><span class="op">=</span> <span class="string">&#39;\t&#39;</span>)
+                .<span class="ident">map</span>(<span class="op">|</span><span class="ident">n</span><span class="op">|</span> (<span class="ident">n</span>, <span class="ident">s</span>.<span class="ident">len</span>() <span class="op">-</span> <span class="ident">n</span>, (<span class="kw-2">&amp;</span><span class="ident">s</span>[<span class="ident">n</span>..]).<span class="ident">chars</span>().<span class="ident">any</span>(<span class="op">|</span><span class="ident">c</span><span class="op">|</span> <span class="ident">c</span> <span class="op">=</span><span class="op">=</span> <span class="string">&#39;.&#39;</span>)))
+                .<span class="ident">unwrap_or_else</span>(<span class="op">|</span><span class="op">|</span> (<span class="number">0</span>, <span class="ident">s</span>.<span class="ident">len</span>(), <span class="ident">s</span>.<span class="ident">chars</span>().<span class="ident">any</span>(<span class="op">|</span><span class="ident">c</span><span class="op">|</span> <span class="ident">c</span> <span class="op">=</span><span class="op">=</span> <span class="string">&#39;.&#39;</span>)))
+            })
+            .<span class="ident">scan</span>(<span class="macro">vec</span><span class="macro">!</span>[], <span class="op">|</span><span class="ident">parents</span>, (<span class="ident">level</span>, <span class="ident">s_len</span>, <span class="ident">is_file</span>)<span class="op">|</span> {
+                <span class="kw">if</span> <span class="ident">level</span> <span class="op">&lt;</span> <span class="ident">parents</span>.<span class="ident">len</span>() {
+                    <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="ident">parents</span>.<span class="ident">split_off</span>(<span class="ident">level</span>); <span class="comment">// pop until parent level</span>
+                }
+
+                <span class="kw">let</span> <span class="ident">abs_len</span> <span class="op">=</span> <span class="ident">s_len</span> <span class="op">+</span> <span class="ident">parents</span>.<span class="ident">last</span>().<span class="ident">unwrap_or</span>(<span class="kw-2">&amp;</span><span class="number">0</span>);
+
+                <span class="kw">if</span> <span class="op">!</span><span class="ident">is_file</span> {
+                    <span class="ident">parents</span>.<span class="ident">push</span>(<span class="ident">abs_len</span> <span class="op">+</span> <span class="number">1</span>);
+                }
+
+                <span class="prelude-val">Some</span>((<span class="ident">abs_len</span>, <span class="ident">is_file</span>))
+            })
+            .<span class="ident">filter</span>(<span class="op">|</span>(<span class="kw">_</span>, <span class="ident">is_file</span>)<span class="op">|</span> <span class="kw-2">*</span><span class="ident">is_file</span>)
+            .<span class="ident">map</span>(<span class="op">|</span>(<span class="ident">n</span>, <span class="kw">_</span>)<span class="op">|</span> <span class="ident">n</span>)
+            .<span class="ident">max</span>()
+            .<span class="ident">unwrap_or</span>(<span class="number">0</span>) <span class="kw">as</span> <span class="ident">i32</span>
+    }
+}
+
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
+<span class="kw">mod</span> <span class="ident">tests</span> {
+    <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
+
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="kw">fn</span> <span class="ident">test</span>() {
+        <span class="kw">let</span> <span class="ident">cases</span> <span class="op">=</span> <span class="macro">vec</span><span class="macro">!</span>[
+            (<span class="number">20</span>, <span class="string">&quot;dir\n\tsubdir1\n\tsubdir2\n\t\tfile.ext&quot;</span>),
+            (<span class="number">32</span>, <span class="string">&quot;dir\n\tsubdir1\n\t\tfile1.ext\n\t\tsubsubdir1\n\tsubdir2\n\t\tsubsubdir2\n\t\t\tfile2.ext&quot;</span>),
+            (<span class="number">0</span>, <span class="string">&quot;a&quot;</span>),
+            (<span class="number">5</span>, <span class="string">&quot;a.txt&quot;</span>),
+            (<span class="number">5</span>, <span class="string">&quot;b.t\na.txt&quot;</span>),
+            (<span class="number">12</span>, <span class="string">&quot;file1.txt\nfile2.txt\nlongfile.txt&quot;</span>),
+            (<span class="number">16</span>, <span class="string">&quot;dir\n        file.txt&quot;</span>),
+            (<span class="number">14</span>, <span class="string">&quot;a\n\tb1\n\t\tf1.txt\n\taaaaa\n\t\tf2.txt&quot;</span>),
+            (<span class="number">29</span>, <span class="string">&quot;a\n\taa\n\t\taaa\n\t\t\tfile1.txt\naaaaaaaaaaaaaaaaaaaaa\n\tsth.png&quot;</span>),
+            (<span class="number">10</span>, <span class="string">&quot;a\n\tb\n\t\tc.txt\n\taaaa.txt&quot;</span>),
+        ];
+
+        <span class="kw">for</span> (<span class="ident">expect</span>, <span class="ident">input</span>) <span class="kw">in</span> <span class="ident">cases</span> {
+            <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">expect</span>, <span class="ident">Solution</span>::<span class="ident">length_longest_path</span>(<span class="ident">input</span>.<span class="ident">into</span>()));
+        }
+    }
+}
+</pre></div>
+</section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../";window.currentCrate = "leetcode";</script><script src="../../main.js"></script><script src="../../source-script.js"></script><script src="../../source-files.js"></script><script defer src="../../search-index.js"></script></body></html>

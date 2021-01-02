@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["Solution","Rust 的抽象层次很高，高级抽象，几乎零开销，函数式，高阶函数， Pattern Matching 这些语法让程序写起来会很简洁，同时也不失去性能。"]]});
